@@ -1,0 +1,68 @@
+= INDEX — Engine
+:toc:
+
+_Regles absolues_ : voir `AGENT.adoc`
+_Ontologie spatiale_ : voir `configuration/.agents/AGENT_GOVERNANCE.adoc`
+_DAG_ : N3 — Orchestration (Regle 4bis)
+
+_Derniere mise a jour_ : 2026-05-05
+_Session en cours_ : 0 — bootstrap gouvernance agent
+
+'''
+== REGLES ABSOLUES (resume)
+
+=== 1. COMMITS/GIT — INTERDICTION FORMELLE sans permission
+=== 2. PAS DE publishToMavenLocal — engine n'est pas un plugin
+=== 3. SECRETS via configuration/ — jamais en dur dans build.gradle.kts
+=== 4. DAG N3 — jamais importe par N0/N1/N2
+=== 5. PROCEDURE DE FIN DE SESSION — 6 ETAPES OBLIGATOIRES
+
+'''
+== Sessions
+
+|===
+| # | Date | Type | Sujet | Score
+| 0 | 2026-05-05 | init | Bootstrap gouvernance agent engine | —
+|===
+
+'''
+== Roadmap — Etat Actuel
+
+|===
+| EPIC | Description | Statut | Priorite
+| ENG-0 | Bootstrap gouvernance agent engine | EN COURS | P0
+| ENG-1 | `aggregateGraphs` — agregation globale graph.json | A FAIRE | P0
+| ENG-2 | `verifyDagAcyclic` — verification DAG inter-plugins | A FAIRE | P0
+| ENG-3 | `provisionWorkspace` — provisionnement workspace client | A FAIRE | P1
+| ENG-4 | Interface CLI — commandes utilisateur | A FAIRE | P1
+| ENG-5 | Interface API — endpoint SaaS Edster | A FAIRE | P2
+| ENG-6 | Chatbot CI/CD conversationnel | A FAIRE | P2
+|===
+
+'''
+== Fichiers Associes
+
+|===
+| Fichier | Etat
+| `AGENT.adoc` | ✅ Cree (bootstrap 2026-05-05)
+| `.agents/INDEX.adoc` | ✅ Cree (bootstrap 2026-05-05)
+| `.agents/PROMPT_REPRISE.adoc` | ✅ Cree (bootstrap 2026-05-05)
+| `.agents/SESSION_PROCEDURE.adoc` | ✅ Cree (bootstrap 2026-05-05)
+| `.gitignore` | ✅ Cree (bootstrap 2026-05-05)
+| `build.gradle.kts` | ✅ Squelette (TODO: includeBuild + tasks)
+| `settings.gradle.kts` | ✅ Minimal (rootProject.name = "engine")
+|===
+
+'''
+== Dependances Inter-Projets (DAG N3)
+
+|===
+| Projet importe | Niveau | Usage dans engine
+| `graphify-gradle` | N0 | Scan workspace → graph.json local
+| `codebase-gradle` | N1 | RAG pgvector, anonymisation, augmentOpencode
+| `plantuml-gradle` | N2 | Diagrammes KG globaux
+| `slider-gradle` | N2 | Slides Reveal.js avec RAG transverse
+| `bakery-gradle` | N2 | Site architecture, pages statiques
+| `readme-gradle` | N2 | README formate multilangues
+| `training-gradle` | N2 | Extraction referentiels AFNOR/REAC
+|===

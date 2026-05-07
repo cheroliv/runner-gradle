@@ -1,0 +1,30 @@
+= SESSION_PROCEDURE — Engine
+
+== Procedure de Fin de Session — 6 Etapes Obligatoires
+
+. *Rapport de session* — Creer `foundry/engine/.agents/sessions/NNN-sujet.adoc`
+. *Mise a jour PROMPT_REPRISE.adoc* — Contexte de reprise pour la session suivante
+. *Mise a jour INDEX.adoc* — Mettre a jour le numero de session, roadmap, etat des EPICs
+. *Mise a jour SESSIONS_HISTORY.adoc* — Ajouter l'entree dans l'historique
+. *Archivage COMPLETED_TASKS_ARCHIVE.adoc* — Archiver les taches terminees
+. *Verification* — Relire `.gitignore`, verifier aucun fichier sensible present
+
+== Commandes de Verification
+
+[source,shell]
+----
+# Verifier l'etat git
+git status
+
+# Verifier l'absence de secrets
+grep -r "TOKEN\|SECRET\|PASSWORD\|API_KEY" foundry/engine/ --include="*.kts"
+
+# Verifier le DAG (a implementer)
+./gradlew verifyDagAcyclic
+----
+
+== Rappels
+
+* PAS de `publishToMavenLocal` — engine n'est pas un plugin
+* PAS de tests dans la procedure de fin de session sans permission
+* PAS de commit sans "commit" explicite de l'utilisateur

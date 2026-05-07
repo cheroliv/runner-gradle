@@ -1,0 +1,25 @@
+= PROMPT_REPRISE — Session 0 — Engine
+
+== Contexte de Reprise
+
+Session 0 — bootstrap de la gouvernance agent pour `foundry/engine/`.
+Le projet vient d'etre cree comme remplacement de l'ancien `workspace-engine`.
+Engine est le point d'entree unique du workspace (N3 — Orchestration dans le DAG).
+
+Le renommage `__repositories__/ → foundry/` et `workspace-engine → engine` est termine.
+Toute la documentation (racine, configuration/, office/) est a jour.
+
+== Prochaine etape
+
+Completer `build.gradle.kts` avec `includeBuild()` pour les plugins N0/N1/N2
+en dev mode. Premier EPIC : ENG-1 `aggregateGraphs`.
+
+== Decisions Actees
+
+* Engine est build script only — pas de `src/main/kotlin`, pas de plugin
+* Les secrets viennent de `configuration/` (pattern Spring Cloud Config)
+* Engine est N3 — personne ne l'importe, il importe tout le monde
+* Pas de `publishToMavenLocal` pour engine
+
+[.text-right]
+*Session 2026-05-05 — bootstrap PROMPT_REPRISE.*
