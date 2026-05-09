@@ -4,6 +4,12 @@
 |===
 | Session | Date | Type | EPIC(s) | Score
 
+| 003
+| 2026-05-10
+| feature
+| ENG-3 provisionWorkspace, ENG-4 Interface CLI
+| 10/10 — provision.sh (14 repos clone), engine.sh CLI wrapper, 5 tasks engine
+
 | 002
 | 2026-05-09
 | feature

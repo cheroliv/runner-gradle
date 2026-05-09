@@ -1,32 +1,50 @@
-= PROMPT_REPRISE — Sessions 2-3 — Engine
+= PROMPT_REPRISE — Session 004 — Engine
 :toc:
 
 == Contexte de Reprise
 
-**Session 2 a realise** :
-- Bootstrap graphify-gradle (N0) — plugin `com.cheroliv.graphify:0.0.1` dans `mavenLocal`
-- ENG-1 `aggregateGraphs` — validation graph.json global (21k nodes, 22k edges, 24 communautes)
-- ENG-2 `verifyDagAcyclic` — verification DAG sur 22 projets → PASS, aucune violation
-- Configuration `settings.gradle.kts` : mavenLocal + gradlePluginPortal
-- `build.gradle.kts` : application graphify plugin + taches engine
+**Sessions 0→3 ont realise** :
+- Session 0 : Bootstrap gouvernance agent engine
+- Session 1 : git init + repo GitHub cheroliv/engine
+- Session 2 : ENG-1 aggregateGraphs (21k nodes) + ENG-2 verifyDagAcyclic (22 projets, PASS)
+- Session 3 : ENG-3 provisionWorkspace (provision.sh 14 repos) + ENG-4 CLI (engine.sh wrapper, 5 tasks)
 
-== Prochaine etape — Session 3
+== Prochaine etape — Session 004
 
-P0 — ENG-3 : `provisionWorkspace` — provisionnement workspace client (tous les plugins + office/ + configuration/)
-P0 — ENG-4 : Interface CLI — commandes utilisateur
+P0 — ENG-5 : Interface API — endpoint SaaS Edster
+P0 — ENG-6 : Chatbot CI/CD conversationnel
 
-P1 — ENG-5 : Interface API — endpoint SaaS Edster
-P1 — ENG-6 : Chatbot CI/CD conversationnel
+Sous-taches ENG-5 :
+. Definir un contrat API REST minimal pour Edster (health, provision, status)
+. Generer un fichier `openapi.yaml` comme contrat
+. Task Gradle `apiSchema` qui valide le contrat
+
+Sous-taches ENG-6 :
+. Script `chatbot.sh` qui lit `graph.json` + `AUGMENTED_CONTEXT_PIPELINE.adoc`
+. Prompt system engine : "Tu es l'orchestrateur N3. Explique les dependances."
+. Boucle REPL locale (readline)
+
+== Etat Actuel build.gradle.kts
+
+[source]
+----
+5 tasks engine:
+  aggregateGraphs    Validate global graph.json
+  verifyDagAcyclic   Check DAG rule violations
+  provisionWorkspace Generate workspace setup script
+  info               Engine status display
+  usage              CLI commands reference
+
+CLI: engine.sh (info/verify/graph/provision/tasks/usage)
+----
 
 == Decisions Actees
 
-* Engine est build script only — pas de `src/main/kotlin`, pas de plugin
-* Les secrets viennent de `configuration/` (pattern Spring Cloud Config)
-* Engine est N3 — personne ne l'importe, il importe tout le monde
-* Pas de `publishToMavenLocal` pour engine
+* Engine est build script only — pas de src/main/kotlin
+* Secrets depuis configuration/ — pattern Spring Cloud Config
+* Engine N3 — personne ne l'importe, il importe tout le monde
+* Pas de publishToMavenLocal pour engine
 * Pas de commit sans "commit" explicite
-* graphify-gradle: `scanWorkspace` est untracked (doNotTrackState) — scan full workspace non incremental
-* graphify-gradle: resilient aux chemins inaccessibles (skip silencieux)
 
 [.text-right]
-*Session 2026-05-09 — generee par la procedure de fin de session 2.*
+*Session 2026-05-10 — generee par la procedure de fin de session 003.*

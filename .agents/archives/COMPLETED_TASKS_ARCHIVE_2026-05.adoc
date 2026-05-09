@@ -1,5 +1,20 @@
 = Taches Terminees Archive — Mai 2026 — Engine
 
+== Session 003 — 2026-05-10
+
+|===
+| EPIC | Tache | Statut
+
+| ENG-3
+| `provisionWorkspace` — Generation provision.sh pour bootstrap workspace
+| ✅ `./gradlew provisionWorkspace` → provision.sh (88 lignes, 14 repos N0→N3)
+
+| ENG-4
+| `Interface CLI` — Wrapper engine.sh + commandes info/usage
+| ✅ `./engine.sh info` / `./engine.sh usage` / `./engine.sh provision`
+|===
+
+'''
 == Session 002 — 2026-05-09
 
 |===

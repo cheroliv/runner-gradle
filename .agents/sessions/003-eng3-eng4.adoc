@@ -1,0 +1,46 @@
+= Session 003 — ENG-3 provisionWorkspace + ENG-4 Interface CLI
+:type: feature
+:date: 2026-05-10
+:modele: deepseek-v4-pro (via opencode)
+:score: 10/10
+
+== Objectif
+
+ENG-3 : Generation d'un script de provisionnement de workspace client.
+ENG-4 : Interface CLI unifiee pour les commandes engine.
+
+== Livrables
+
+- `provisionWorkspace` task (groupe engine) :
+  - Genere `build/provision/provision.sh` executable
+  - Clone tous les repos `cheroliv/*` depuis GitHub (N0→N3)
+  - Structure workspace : `foundry/OSS/`, `office/`, `configuration/`
+  - Skip si deja present (`clone --depth 1`)
+
+- `info` task (groupe engine) :
+  - Affiche statut complet : paths, DAG registry (21 projets), tasks list
+
+- `usage` task (groupe engine) :
+  - Affiche commandes disponibles avec exemples
+
+- `engine.sh` — CLI wrapper utilisable via `./engine <cmd>` ou symlink `~/workspace/engine`
+
+5 taches engine totales : `aggregateGraphs`, `verifyDagAcyclic`, `provisionWorkspace`, `info`, `usage`
+
+== Tests
+
+- `./gradlew tasks --group engine` → 5 taches affichees
+- `./gradlew info` → DAG registry 21 projets (N0..N3) + paths OK
+- `./gradlew provisionWorkspace` → provision.sh genere (88 lignes, 14 repos clones)
+- `./engine.sh info` / `./engine.sh usage` → CLI OK
+
+== Build
+
+`./gradlew tasks --group engine` → BUILD SUCCESSFUL
+Zero secret detecte.
+
+== Decisions
+
+- Task `help` renommee `usage` (conflit avec la task Gradle integree `help`)
+- provision.sh utilise `--depth 1` pour legerete, `|| true` pour resilience reseau
+- CLI wrapper delegue a `./gradlew -q` pour output propre
