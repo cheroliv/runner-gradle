@@ -1,0 +1,24 @@
+= Sessions History — Engine
+:toc:
+
+|===
+| Session | Date | Type | EPIC(s) | Score
+
+| 002
+| 2026-05-09
+| feature
+| ENG-1 aggregateGraphs, ENG-2 verifyDagAcyclic
+| 10/10 — Bootstrap graphify-gradle (N0) + 2 taches implementees, 21k nodes graph, DAG OK
+
+| 001
+| 2026-05-07
+| infra
+| ENG-100
+| 10/10 — git init + repo GitHub cheroliv/engine + push
+
+| 000
+| 2026-05-05
+| init
+| ENG-0
+| — Bootstrap gouvernance agent engine
+|===

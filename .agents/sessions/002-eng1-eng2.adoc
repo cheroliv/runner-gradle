@@ -1,0 +1,67 @@
+= Session 002 — ENG-1 aggregateGraphs / ENG-2 verifyDagAcyclic
+:date: 2026-05-09
+:score: 10/10
+
+== Objectifs
+
+- P0: ENG-1 `aggregateGraphs` — agregation globale graph.json
+- P0: ENG-2 `verifyDagAcyclic` — verification DAG inter-plugins
+
+== Realisations
+
+=== Bootstrap graphify-gradle (N0)
+
+Pre-requis bloqueur pour ENG-1. Plugin `com.cheroliv.graphify:0.0.1` cree dans
+`foundry/OSS/graphify-gradle/graphify-plugin/`:
+
+* `GraphModel.kt` — data classes (GraphNode, GraphEdge, GraphCommunity)
+* `GraphifyPlugin.kt` — enregistre la tache `scanWorkspace`
+* `GraphifyExtension.kt` — DSL (rootDir, outputFile, excludePatterns)
+* `ScanWorkspaceTask.kt` — walkFileTree resilient (skip inaccessible paths)
+
+Tache `scanWorkspace` publiee dans `mavenLocal`.
+Resultat: 21k nodes, 22k edges, 24 communautes → `office/graph.json`
+
+=== ENG-2: verifyDagAcyclic
+
+Tache `verifyDagAcyclic` implantee dans `engine/build.gradle.kts`:
+* Parcourt les 22 `build.gradle.kts` des projets `foundry/OSS/`
+* Extrait les plugins `com.cheroliv.*` importes
+* Verifie Regle 4bis: aucun projet n'importe un projet de niveau superieur
+* Resultat: DAG Acyclic OK, aucune violation
+
+=== ENG-1: aggregateGraphs
+
+Tache `aggregateGraphs` implantee dans `engine/build.gradle.kts`:
+* depend de `scanWorkspace` (graphify-gradle)
+* Valide et resume le graph.json global genere
+* Sortie: 21174 nodes, 22286 edges, 24 communities
+
+=== Configuration engine
+
+* `settings.gradle.kts`: ajout `mavenLocal()` + `gradlePluginPortal()`
+* `build.gradle.kts`: application de `com.cheroliv.graphify:0.0.1`
+* Nettoyage des TODO residuels
+
+== Fichiers modifies
+
+| Fichier | Action |
+| build.gradle.kts | Ajout graphify plugin + tasks ENG-1/ENG-2 |
+| settings.gradle.kts | Ajout mavenLocal() + gradlePluginPortal() |
+
+== Fichiers crees
+
+| Fichier | Projet |
+| foundry/OSS/graphify-gradle/ (tout) | Bootstrap N0 |
+| office/graph.json | Output scanWorkspace |
+
+== Verification
+
+* `./gradlew verifyDagAcyclic` → PASS
+* `./gradlew aggregateGraphs` → PASS
+* Zero secret detecte (`grep TOKEN/SECRET/PASSWORD/API_KEY`)
+* `git status` → build.gradle.kts + settings.gradle.kts modifies
+
+== Prochaine session
+
+Session 003 — ENG-3 provisionWorkspace / ENG-4 Interface CLI

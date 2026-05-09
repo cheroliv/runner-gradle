@@ -1,26 +1,22 @@
-= PROMPT_REPRISE — Sessions 1-2 — Engine
+= PROMPT_REPRISE — Sessions 2-3 — Engine
 :toc:
 
 == Contexte de Reprise
 
-**Session 1 a realise** :
-- git init + premier commit `foundry/engine/` (11 fichiers, zero secret)
-- Creation repo GitHub `cheroliv/engine` (private)
-- Push initial vers `https://github.com/cheroliv/engine`
-- Le workflow CI/CD `deploy-cheroliv-com.yml` est deja configure pour checkout `cheroliv/engine`
+**Session 2 a realise** :
+- Bootstrap graphify-gradle (N0) — plugin `com.cheroliv.graphify:0.0.1` dans `mavenLocal`
+- ENG-1 `aggregateGraphs` — validation graph.json global (21k nodes, 22k edges, 24 communautes)
+- ENG-2 `verifyDagAcyclic` — verification DAG sur 22 projets → PASS, aucune violation
+- Configuration `settings.gradle.kts` : mavenLocal + gradlePluginPortal
+- `build.gradle.kts` : application graphify plugin + taches engine
 
-== Prochaine etape — Session 2
+== Prochaine etape — Session 3
 
-Completer `build.gradle.kts` selon la roadmap :
+P0 — ENG-3 : `provisionWorkspace` — provisionnement workspace client (tous les plugins + office/ + configuration/)
+P0 — ENG-4 : Interface CLI — commandes utilisateur
 
-P0 — ENG-1 : `aggregateGraphs` — aggregation globale graph.json (depend de `graphify-gradle`)
-P0 — ENG-2 : `verifyDagAcyclic` — verification DAG inter-plugins
-
-P1 — ENG-3 : `provisionWorkspace` — provisionnement workspace client
-P1 — ENG-4 : Interface CLI — commandes utilisateur
-
-P2 — ENG-5 : Interface API — endpoint SaaS Edster
-P2 — ENG-6 : Chatbot CI/CD conversationnel
+P1 — ENG-5 : Interface API — endpoint SaaS Edster
+P1 — ENG-6 : Chatbot CI/CD conversationnel
 
 == Decisions Actees
 
@@ -29,6 +25,8 @@ P2 — ENG-6 : Chatbot CI/CD conversationnel
 * Engine est N3 — personne ne l'importe, il importe tout le monde
 * Pas de `publishToMavenLocal` pour engine
 * Pas de commit sans "commit" explicite
+* graphify-gradle: `scanWorkspace` est untracked (doNotTrackState) — scan full workspace non incremental
+* graphify-gradle: resilient aux chemins inaccessibles (skip silencieux)
 
 [.text-right]
-*Session 2026-05-07 — generee par la procedure de fin de session 1.*
+*Session 2026-05-09 — generee par la procedure de fin de session 2.*

@@ -1,0 +1,19 @@
+= Taches Terminees Archive — Mai 2026 — Engine
+
+== Session 002 — 2026-05-09
+
+|===
+| EPIC | Tache | Statut
+
+| ENG-1
+| `aggregateGraphs` — Aggregation globale graph.json
+| ✅ `./gradlew aggregateGraphs` → 21174 nodes, 22286 edges, 24 communities
+
+| ENG-2
+| `verifyDagAcyclic` — Verification DAG inter-plugins
+| ✅ `./gradlew verifyDagAcyclic` → 22 projets verifies, aucune violation
+
+| N/A
+| Bootstrap graphify-gradle (N0)
+| ✅ Plugin `com.cheroliv.graphify:0.0.1` dans mavenLocal
+|===
