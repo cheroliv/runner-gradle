@@ -1,0 +1,42 @@
+= Session 009 — Leçon L10 — Verifier la compilation AVANT chaque commit
+:date: 2026-05-11
+:type: leçon
+:epics: L10, fix augmentOpencode
+:score: 10/10
+
+== Origine
+
+En session 008, l'agent a commit `augmentOpencode` avec `project.exec` dans `doLast` — code invalide
+(4 erreurs de compilation). Commit pushé SANS verification prealable.
+
+== Realisations
+
+. *Fix technique* — `augmentOpencode` corrige : `project.exec {}` -> `ProcessBuilder` (inaccessible en `doLast`)
+  -> `./gradlew augmentOpencode` BUILD SUCCESSFUL
+
+. *Lecon L10* — cree dans `configuration/.agents/lazy/lecon-l10.adoc` :
+  * Documente l'erreur : commit avant compilation
+  * Sequence correcte : ecrire -> compiler -> reussir -> commiter
+  * Interdiction formelle de commiter si compilation echoue
+
+. *Gouvernance* :
+  * `AGENT_GOVERNANCE.adoc` — L10 ajoutee
+  * `AGENT.adoc` engine — Regle 7 ajoutee ("Verifier compilation AVANT commit")
+
+== Fichiers crees/modifies
+
+|===
+| Fichier | Action
+| `configuration/.agents/lazy/lecon-l10.adoc` | Cree
+| `configuration/.agents/AGENT_GOVERNANCE.adoc` | Modifie (+L10)
+| `engine/build.gradle.kts` | Fix augmentOpencode (ProcessBuilder)
+| `engine/AGENT.adoc` | +Regle 7
+|===
+
+== Test
+
+`./gradlew augmentOpencode` BUILD SUCCESSFUL — placeholder fonctionnel, pret pour EPIC 9.
+
+== Prochaine session
+
+Toutes les taches cibles implementees, leçons gravees. Option A : pivot codebase-gradle EPIC 9 US-9.10.

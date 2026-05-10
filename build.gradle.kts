@@ -309,6 +309,50 @@ tasks.register("apiSchema") {
     }
 }
 
+tasks.register("augmentOpencode") {
+    group = "engine"
+    description = "Pipeline complet walk->index->query->format -> /tmp/opencode-context.txt"
+
+    val contextFile = File("/tmp/opencode-context.txt")
+    val codebaseDir = foundryDir.resolve("codebase-gradle")
+
+    doLast {
+        val buildFile = codebaseDir.resolve("build.gradle.kts")
+        if (!buildFile.exists()) {
+            println("augmentOpencode: codebase-gradle (N1) non trouve dans foundry/OSS/")
+            println("  Clone requis : git clone https://github.com/cheroliv/codebase-gradle.git $codebaseDir")
+            return@doLast
+        }
+
+        val hasAugmentTask = File(codebaseDir, "build.gradle.kts")
+            .readText()
+            .contains("augmentOpencode")
+
+        if (!hasAugmentTask) {
+            println("augmentOpencode: EPIC 9 codebase-gradle pas encore implemente.")
+            println("  US-9.10 CompositeContextBuilder + US-9.11 OpencodeInjector requis.")
+            println("  Placeholder -> ${contextFile.absolutePath} (contenu vide)")
+            contextFile.writeText("")
+            return@doLast
+        }
+
+        val process = ProcessBuilder(
+            listOf("./gradlew", "-q", "augmentOpencode")
+        )
+            .directory(codebaseDir)
+            .inheritIO()
+            .start()
+        val exitCode = process.waitFor()
+        if (exitCode != 0) {
+            throw RuntimeException("codebase-gradle augmentOpencode a echoue (exit $exitCode)")
+        }
+        if (!contextFile.exists()) {
+            throw RuntimeException("${contextFile.absolutePath} non genere par codebase-gradle")
+        }
+        println("augmentOpencode OK -> ${contextFile.absolutePath} (${contextFile.readText().lines().size} lignes)")
+    }
+}
+
 tasks.register("usage") {
     group = "engine"
     description = "Shows available engine commands with usage examples"

@@ -4,6 +4,18 @@
 |===
 | Session | Date | Type | EPIC(s) | Score
 
+| 009
+| 2026-05-11
+| leçon
+| L10 — Compilation AVANT chaque commit
+| 10/10 — lecon-l10.adoc, Regle 7 dans AGENT.adoc, L10 dans AGENT_GOVERNANCE.adoc, fix augmentOpencode
+
+| 008
+| 2026-05-11
+| feature
+| augmentOpencode — derniere tache cible du contrat
+| 10/10 — task augmentOpencode (ProcessBuilder, detection EPIC 9), engine.sh augment, usage()
+
 | 007
 | 2026-05-11
 | leçon

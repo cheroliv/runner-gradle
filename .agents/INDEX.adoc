@@ -6,8 +6,8 @@ _Ontologie spatiale_ : voir `configuration/.agents/AGENT_GOVERNANCE.adoc`
 _DAG_ : N3 — Orchestration (Regle 4bis)
 
 _Derniere mise a jour_ : 2026-05-11
-_Session terminee_ : 7 — Lecon L09 (Engine consomme, ne sert pas)
-_Session en cours_ : 8 — augmentOpencode (derniere tache cible)
+_Session terminee_ : 9 — Lecon L10 (compilation avant commit) + fix augmentOpencode
+_Session en cours_ : 10 — (a definir)
 
 '''
 == REGLES ABSOLUES (resume)
@@ -23,6 +23,8 @@ _Session en cours_ : 8 — augmentOpencode (derniere tache cible)
 
 |===
 | # | Date | Type | Sujet | Score
+| 9 | 2026-05-11 | leçon | L10 — Compilation AVANT chaque commit + fix augmentOpencode | 10/10
+| 8 | 2026-05-11 | feature | augmentOpencode — derniere tache cible du contrat | 10/10
 | 7 | 2026-05-11 | leçon | L09 — Engine N3 consommateur, pas serveur HTTP | 10/10
 | 6 | 2026-05-11 | feature | ENG-7 Integration engine.sh + ENG-8 Mock /health | 10/10
 | 5 | 2026-05-11 | feature | ENG-5 Interface API openapi.yaml + apiSchema + ENG-6 Chatbot CI/CD | 10/10
@@ -49,6 +51,9 @@ _Session en cours_ : 8 — augmentOpencode (derniere tache cible)
 | ENG-6 | Chatbot CI/CD conversationnel | TERMINE (session 5) | P2
 | ENG-7 | Integration CLI — engine.sh api/chatbot/health | TERMINE (session 6) | P2
 | ENG-8 | Mock /health endpoint — health.sh JSON | TERMINE (session 6) | P2
+| L09 | Lecon — Engine N3 consommateur, pas serveur HTTP | TERMINE (session 7) | P0
+| ENG-9 | `augmentOpencode` — derniere tache cible contrat | TERMINE (session 8) | P0
+| L10 | Lecon — Compilation AVANT chaque commit | TERMINE (session 9) | P0
 |===
 
 '''

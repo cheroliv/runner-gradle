@@ -1,5 +1,31 @@
 = Taches Terminees Archive — Mai 2026 — Engine
 
+== Session 009 — 2026-05-11
+
+|===
+| EPIC | Tache | Statut
+
+| L10
+| `Leçon` — Compilation AVANT chaque commit
+| ✅ lecon-l10.adoc créé dans configuration/.agents/lazy/, L10 ajoutée à AGENT_GOVERNANCE.adoc, Règle 7 dans AGENT.adoc engine
+
+| N/A
+| `Fix` — augmentOpencode compile et s'exécute
+| ✅ ProcessBuilder remplace project.exec, ./gradlew augmentOpencode BUILD SUCCESSFUL
+|===
+
+'''
+== Session 008 — 2026-05-11
+
+|===
+| EPIC | Tache | Statut
+
+| ENG-9
+| `augmentOpencode` — derniere tache cible du contrat AGENT.adoc
+| ✅ Task Gradle + detection EPIC 9 + placeholder /tmp/opencode-context.txt + commande engine.sh
+|===
+
+'''
 == Session 007 — 2026-05-11
 
 |===

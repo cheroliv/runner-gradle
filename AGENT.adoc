@@ -58,6 +58,12 @@ Les 4 tâches cibles sont définies dans la section <<Taches Cibles>>. Toute nou
 tâche (serveur HTTP, endpoint REST, etc.) doit être proposée et acceptée avant
 implémentation. Voir leçon L09 dans `configuration/.agents/lazy/lecon-l09.adoc`.
 
+=== Regle 7 — Verifier la compilation AVANT chaque commit
+
+* Avant `git commit`, lancer la tache concernee (ex: `./gradlew <nomDeLaTache>`)
+* Si echec -> interdiction de commiter -> corriger d'abord
+* Voir lecon L10 dans `configuration/.agents/lazy/lecon-l10.adoc`
+
 == Procedure de Fin de Session (obligatoire)
 
 . Lire `.agents/SESSION_PROCEDURE.adoc`

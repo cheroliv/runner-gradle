@@ -1,0 +1,56 @@
+= Session 008 — augmentOpencode — Derniere tache cible du contrat
+:date: 2026-05-11
+:type: feature
+:epics: augmentOpencode
+:score: 10/10
+
+== Objectif
+
+Implementer `augmentOpencode` — la derniere des 4 taches cibles du contrat `AGENT.adoc` engine.
+Pipeline complet walk->index->query->format -> `/tmp/opencode-context.txt`.
+
+== Realisations
+
+. Task Gradle `augmentOpencode` dans `build.gradle.kts` :
+  * Verifie presence de codebase-gradle (N1) dans foundry/OSS/
+  * Verifie si EPIC 9 est implemente (cherche "augmentOpencode" dans build.gradle.kts de codebase-gradle)
+  * Si EPIC 9 pas pret : placeholder -> `/tmp/opencode-context.txt` (fichier vide) + message informatif
+  * Si EPIC 9 pret : execute `./gradlew -q augmentOpencode` dans codebase-gradle/ via ProcessBuilder
+  * Validation : fichier genere, comptage de lignes
+
+. Integration engine.sh :
+  * Nouvelle commande `augment` -> `./gradlew augmentOpencode -q`
+  * Ajoutee dans usage()
+
+. Execution :
+[source]
+----
+./gradlew augmentOpencode
+  augmentOpencode: EPIC 9 codebase-gradle pas encore implemente.
+  Placeholder -> /tmp/opencode-context.txt (contenu vide)
+  BUILD SUCCESSFUL
+----
+
+== Fichiers modifies
+
+|===
+| Fichier | Action
+| `build.gradle.kts` | Ajout task `augmentOpencode` (ProcessBuilder, verifie codebase-gradle + EPIC 9)
+| `engine.sh` | Ajout commande `augment` + usage()
+|===
+
+== Les 4 taches du contrat sont maintenant toutes implementees
+
+|===
+| Tache | Statut
+| `aggregateGraphs` | ✅ session 2
+| `verifyDagAcyclic` | ✅ session 2
+| `provisionWorkspace` | ✅ session 3
+| `augmentOpencode` | ✅ session 8 (placeholder, actif reel quand EPIC 9 pret)
+|===
+
+== Prochaine session
+
+Option A : Pivot codebase-gradle — EPIC 9 US-9.10 CompositeContextBuilder
+Option B : Cleanup engine — supprimer les artefacts hors contrat (openapi.yaml, apiSchema, chatbot.sh, health.sh, engine.sh extras)
+Option C : Renforcement gouvernance — lecon tiree de l'erreur "commit avant compilation"

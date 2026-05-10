@@ -20,6 +20,7 @@ Commands:
   api | contract       Validate OpenAPI 3.0 contract (openapi.yaml)
   chatbot [model]      Start REPL with Ollama (default: deepseek-v4-pro:cloud)
   health               Return workspace health JSON
+  augment              Run augmentOpencode pipeline -> /tmp/opencode-context.txt
   tasks                List all Gradle tasks (engine + subprojects)
 
 Direct Gradle:
@@ -51,6 +52,9 @@ case "${1:-}" in
         ;;
     health)
         ./health.sh
+        ;;
+    augment)
+        ./gradlew augmentOpencode -q
         ;;
     tasks)
         ./gradlew tasks --group engine

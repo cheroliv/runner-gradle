@@ -1,59 +1,46 @@
-= PROMPT_REPRISE — Session 008 — Engine
+= PROMPT_REPRISE — Session 010 — Engine
 :toc:
 
 == Contexte de Reprise
 
-*Sessions 0→7 ont realise* :
-- 0 : Bootstrap gouvernance
-- 1 : git init + repo GitHub
-- 2 : ENG-1 aggregateGraphs + ENG-2 verifyDagAcyclic
-- 3 : ENG-3 provisionWorkspace + ENG-4 CLI
-- 4 : B1 StdoutFormatter [CTX]/[PLAN]/[RESULT] dans codebase-gradle/rag
-- 5 : ENG-5 openapi.yaml + apiSchema (contrat Edster) + ENG-6 chatbot.sh (REPL Ollama)
-- 6 : ENG-7 Integration engine.sh + ENG-8 health.sh (mock /health JSON)
-- 7 : Lecon L09 — Engine N3 consommateur, pas serveur HTTP (gravee dans gouvernance)
+*Sessions 0→9 ont realise* :
+- 0-3 : Bootstrap, git init, ENG-1/2 (aggregateGraphs/verifyDagAcyclic), ENG-3/4 (provisionWorkspace/CLI)
+- 4 : B1 StdoutFormatter dans codebase-gradle/rag
+- 5 : ENG-5 openapi.yaml + apiSchema + ENG-6 chatbot.sh
+- 6 : ENG-7 Integration engine.sh + ENG-8 health.sh
+- 7 : L09 — Engine N3 consommateur, pas serveur (gravee gouvernance)
+- 8 : augmentOpencode — derniere tache cible (placeholder, pret EPIC 9)
+- 9 : L10 — Compilation AVANT chaque commit (gravee gouvernance) + fix augmentOpencode
 
-== Prochaine etape — Session 008
+== Contrat Engine — 4 taches cibles TERMINEES
 
-P0 — Derniere tache cible du contrat AGENT.adoc engine :
-`augmentOpencode` — pipeline complet walk→index→query→format → `/tmp/opencode-context.txt`
+|===
+| Tache | Session | Statut
+| `aggregateGraphs` | 2 | ✅
+| `verifyDagAcyclic` | 2 | ✅
+| `provisionWorkspace` | 3 | ✅
+| `augmentOpencode` | 8 | ✅ (placeholder -> /tmp/opencode-context.txt, actif reel quand EPIC 9 pret)
+|===
 
-Depend de codebase-gradle EPIC 9 (US-9.10 CompositeContextBuilder, US-9.11 OpencodeInjector).
-Engine doit :
-. Creer la task Gradle `augmentOpencode` qui appelle le plugin `codebase-gradle`
-. L'exposer via `engine.sh` (`./engine augment`)
-. Valider que `/tmp/opencode-context.txt` est bien genere
+== Regles ajoutees cette session
 
-Si EPIC 9 n'est pas encore pret, engine peut definir la task comme placeholder
-(noop ou echo "EPIC 9 codebase-gradle requis") avec un check de disponibilite.
+. Regle 6 — Pas de taches hors contrat sans validation (L09)
+. Regle 7 — Compilation AVANT commit (L10)
 
-== Actif des sessions anterieures
+== Prochaine etape — Session 010
 
-* `openapi.yaml` — contrat REST Edster (3 paths, 6 schemas)
-* `apiSchema` — validation Kotlin pure
-* `chatbot.sh` — REPL Ollama, prompt N3 francais
-* `health.sh` — JSON HealthResponse
-* `engine.sh` — 8 commandes
-* Lecon L09 gravee dans `configuration/.agents/lazy/lecon-l09.adoc`
-* Regle 6 ajoutee dans `AGENT.adoc` engine
+Le contrat engine est termine. Deux directions :
+* Pivot codebase-gradle — EPIC 9 US-9.10 CompositeContextBuilder (debloque augmentOpencode reel)
+* Cleanup engine — revoir les artefacts hors contrat (openapi.yaml, apiSchema, chatbot.sh)
 
 == Etat Actuel
 
 [source]
 ----
-7 tasks engine: aggregateGraphs, verifyDagAcyclic, provisionWorkspace,
-                apiSchema, info, usage, augmentOpencode (a faire)
-CLI: ./engine.sh <command>
-  info/verify/graph/provision/api/contract/chatbot/health/tasks
+engine.sh — 9 commandes
+build.gradle.kts — 8 taches engine
+AGENT.adoc — 7 regles absolues
 ----
 
-== Decisions Actees
-
-* Engine build script only — pas de src/main/kotlin
-* 4 taches cibles definies dans AGENT.adoc
-* Nouvelle tache = proposition + validation explicite obligatoire
-* Secrets depuis configuration/
-* Couverture de tests = responsabilite des plugins, pas d'engine
-
 [.text-right]
-*Session 2026-05-11 — generee par la procedure de fin de session 007.*
+*Session 2026-05-11 — generee par la procedure de fin de session 009.*
