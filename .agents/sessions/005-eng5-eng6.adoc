@@ -1,0 +1,56 @@
+= Session 005 — ENG-5 Interface API + ENG-6 Chatbot CI/CD
+:date: 2026-05-11
+:type: feature
+:epics: ENG-5 Interface API SaaS Edster, ENG-6 Chatbot CI/CD conversationnel
+:score: 10/10
+
+== Objectif
+
+ENG-5 : Contrat API REST OpenAPI 3.0 pour SaaS Edster (health, provision, status)
+ENG-6 : Script chatbot.sh avec prompt systeme N3 orchestrateur, boucle REPL
+
+== Realisations
+
+=== ENG-5 — Interface API SaaS Edster
+
+. `openapi.yaml` — contrat OpenAPI 3.0.3 complet :
+  * 3 endpoints : `/health` (GET), `/provision` (POST), `/status` (GET)
+  * 6 schemas : HealthResponse, ProvisionRequest, ProvisionResponse, StatusResponse, PluginInfo, ErrorResponse
+  * Tous les champs obligatoires documentes
+. Task Gradle `apiSchema` — validation Kotlin pure (string parsing, zero Groovy) :
+  * Verifie version openapi 3.x
+  * Verifie `info.title` present
+  * Verifie les 3 paths requis
+  * Verifie les 6 schemas requis
+  * Compte les paths/schemas
+  * Execution : BUILD SUCCESSFUL
+
+=== ENG-6 — Chatbot CI/CD conversationnel
+
+. `chatbot.sh` — REPL interactive :
+  * Prompt systeme N3 en francais, regles absolues, contexte DAG
+  * `/exit` pour quitter, `/reset` pour reinitialiser le contexte
+  * Modele par defaut : `deepseek-v4-pro:cloud` (parametrable)
+  * Integration curl vers Ollama API `/api/chat`
+  * Parsing JSON avec `jq`
+  * Chmod +x applique
+
+== Fichiers crees/modifies
+
+|===
+| Fichier | Action
+| `openapi.yaml` | Cree (contrat OpenAPI 3.0.3, 3 paths, 6 schemas)
+| `build.gradle.kts` | Ajout task `apiSchema` (validation Kotlin pure)
+| `chatbot.sh` | Cree (REPL Ollama avec prompt N3)
+| `engine.sh` | Inchangé (ne gere pas encore api/chatbot — a ajouter prochaine session)
+|===
+
+== Dette technique
+
+. `engine.sh` ne gere pas encore les commandes `api` et `chatbot`
+. Pas de validation de schema JSON (format de reponse) dans `apiSchema`
+
+== Prochaine session
+
+ENG-7+ : Ajouter `api` et `chatbot` a `engine.sh`, ecrire un vrai mock HTTP pour `/health`.
+Ou pivot vers EPIC 9 codebase-gradle (US-9.10 CompositeContextBuilder).

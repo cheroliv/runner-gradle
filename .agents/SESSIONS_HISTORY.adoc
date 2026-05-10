@@ -4,6 +4,12 @@
 |===
 | Session | Date | Type | EPIC(s) | Score
 
+| 005
+| 2026-05-11
+| feature
+| ENG-5 Interface API, ENG-6 Chatbot CI/CD
+| 10/10 — openapi.yaml (3 paths, 6 schemas), apiSchema task (Kotlin pur), chatbot.sh (REPL Ollama)
+
 | 004
 | 2026-05-11
 | feature

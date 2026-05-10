@@ -1,0 +1,190 @@
+openapi: "3.0.3"
+info:
+  title: Engine N3 — Orchestration API
+  description: |
+    API SaaS Edster pour l'orchestration du workspace.
+    Engine N3 agrege les plugins N0/N1/N2 et expose :
+    - health : etat global du workspace
+    - provision : bootstrap d'un workspace client
+    - status : statut du DAG et des plugins
+  version: "1.0.0"
+  contact:
+    name: Engine N3 Team
+    url: https://github.com/cheroliv/engine
+
+servers:
+  - url: http://localhost:8080/api/v1
+    description: Local development
+
+paths:
+  /health:
+    get:
+      operationId: health
+      summary: Etat global du workspace
+      description: Retourne l'etat de sante du workspace (DAG OK, plugins disponibles, graph.json present)
+      responses:
+        "200":
+          description: Workspace operationnel
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthResponse"
+        "503":
+          description: Workspace degrade
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthResponse"
+
+  /provision:
+    post:
+      operationId: provision
+      summary: Bootstrap un workspace client
+      description: Genere et execute le provisionnement d'un nouveau workspace (clone repos, config, etc.)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProvisionRequest"
+      responses:
+        "201":
+          description: Workspace provisionne
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProvisionResponse"
+        "400":
+          description: Parametres invalides
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /status:
+    get:
+      operationId: status
+      summary: Statut du DAG et des plugins
+      description: Retourne le registre DAG complet, versions des plugins, et violations eventuelles
+      responses:
+        "200":
+          description: Statut du workspace
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StatusResponse"
+
+components:
+  schemas:
+    HealthResponse:
+      type: object
+      required:
+        - status
+        - timestamp
+        - dagHealthy
+      properties:
+        status:
+          type: string
+          enum:
+            - UP
+            - DEGRADED
+        timestamp:
+          type: string
+          format: date-time
+        dagHealthy:
+          type: boolean
+        graphNodes:
+          type: integer
+        graphEdges:
+          type: integer
+        pluginsAvailable:
+          type: integer
+        version:
+          type: string
+
+    ProvisionRequest:
+      type: object
+      required:
+        - workspacePath
+      properties:
+        workspacePath:
+          type: string
+          description: Chemin absolu du workspace a provisionner
+        githubOrg:
+          type: string
+          default: cheroliv
+          description: Organisation GitHub source des repos
+
+    ProvisionResponse:
+      type: object
+      required:
+        - status
+        - workspacePath
+        - clonedRepos
+      properties:
+        status:
+          type: string
+          enum:
+            - PROVISIONED
+        workspacePath:
+          type: string
+        clonedRepos:
+          type: integer
+          description: Nombre de repos clones
+
+    StatusResponse:
+      type: object
+      required:
+        - dagLevels
+        - plugins
+      properties:
+        dagLevels:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
+          description: Mapping niveau DAG → liste des projets
+        plugins:
+          type: array
+          items:
+            $ref: "#/components/schemas/PluginInfo"
+        violations:
+          type: array
+          items:
+            type: string
+          description: Violations DAG detectees (vide si OK)
+        graphStats:
+          type: object
+          properties:
+            nodes:
+              type: integer
+            edges:
+              type: integer
+            communities:
+              type: integer
+
+    PluginInfo:
+      type: object
+      required:
+        - name
+        - dagLevel
+      properties:
+        name:
+          type: string
+        dagLevel:
+          type: integer
+        version:
+          type: string
+        repo:
+          type: string
+
+    ErrorResponse:
+      type: object
+      required:
+        - error
+      properties:
+        error:
+          type: string
+        detail:
+          type: string

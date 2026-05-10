@@ -1,5 +1,20 @@
 = Taches Terminees Archive — Mai 2026 — Engine
 
+== Session 005 — 2026-05-11
+
+|===
+| EPIC | Tache | Statut
+
+| ENG-5
+| `Interface API` — openapi.yaml + apiSchema
+| ✅ openapi.yaml (3 paths, 6 schemas) + `./gradlew apiSchema` BUILD SUCCESSFUL
+
+| ENG-6
+| `Chatbot CI/CD` — chatbot.sh REPL
+| ✅ chatbot.sh (prompt N3 francais, /exit /reset) + chmod +x
+|===
+
+'''
 == Session 004 — 2026-05-11
 
 |===

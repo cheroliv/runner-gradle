@@ -1,62 +1,60 @@
-= PROMPT_REPRISE — Session 005 — Engine
+= PROMPT_REPRISE — Session 006 — Engine
 :toc:
 
 == Contexte de Reprise
 
-*Sessions 0→4 ont realise* :
+*Sessions 0→5 ont realise* :
 - Session 0 : Bootstrap gouvernance agent engine
 - Session 1 : git init + repo GitHub cheroliv/engine
-- Session 2 : ENG-1 aggregateGraphs (21k nodes) + ENG-2 verifyDagAcyclic (22 projets, PASS)
-- Session 3 : ENG-3 provisionWorkspace (provision.sh 14 repos) + ENG-4 CLI (engine.sh wrapper, 5 tasks)
-- Session 4 : B1 StdoutFormatter — contrat [CTX]/[PLAN]/[RESULT] dans codebase-gradle/rag, compilation OK
+- Session 2 : ENG-1 aggregateGraphs (21k nodes) + ENG-2 verifyDagAcyclic
+- Session 3 : ENG-3 provisionWorkspace + ENG-4 CLI (engine.sh wrapper)
+- Session 4 : B1 StdoutFormatter [CTX]/[PLAN]/[RESULT] dans codebase-gradle/rag
+- Session 5 : ENG-5 openapi.yaml + task apiSchema + ENG-6 chatbot.sh (REPL Ollama)
 
-== Prochaine etape — Session 005
+== Prochaine etape — Session 006
 
-P0 — ENG-5 : Interface API — endpoint SaaS Edster
-P0 — ENG-6 : Chatbot CI/CD conversationnel
+P0 — ENG-7 : Integration engine.sh (api/chatbot/contract commands)
+P1 — ENG-8 : Mock HTTP /health endpoint (test manuel)
 
-Sous-taches ENG-5 :
-. Definir un contrat API REST minimal pour Edster (health, provision, status)
-. Generer un fichier `openapi.yaml` comme contrat
-. Task Gradle `apiSchema` qui valide le contrat
+Sous-taches ENG-7 :
+. Ajouter `api` et `chatbot` a engine.sh
+. Ajouter `contract` (lance apiSchema)
+. Mettre a jour usage()
 
-Sous-taches ENG-6 :
-. Script `chatbot.sh` qui lit `graph.json` + `AUGMENTED_CONTEXT_PIPELINE.adoc`
-. Prompt system engine : "Tu es l'orchestrateur N3. Explique les dependances."
-. Boucle REPL locale (readline)
+Sous-taches ENG-8 :
+. Script `health.sh` qui lit graph.json et retourne le JSON HealthResponse
+. Test manuel : `curl localhost:8080/api/v1/health`
 
-== Actif de la session 004
+== Actif de la session 005
 
-*StdoutFormatter* cree dans `codebase-gradle/src/main/kotlin/codebase/rag/StdoutFormatter.kt` :
-- `object StdoutFormatter` — singleton
-- `Tag` value class — `[CTX]`, `[PLAN]`, `[RESULT]`
-- `ctx()`, `plan()`, `result()` — raccourcis typés
-- `log(ctx, plan, result)` — affiche les 3 sections
-- `banner(title)`, `separator()` — helpers visuels
-- Pret a etre appele depuis `augmentOpencode` (US-9.12)
+* `openapi.yaml` — contrat REST Edster (3 endpoints, 6 schemas)
+* `apiSchema` — task Gradle validation Kotlin pure, BUILD SUCCESSFUL
+* `chatbot.sh` — REPL Ollama, prompt N3 francais, /exit /reset
 
-== Etat Actuel build.gradle.kts
+== Etat Actuel
 
 [source]
 ----
-5 tasks engine:
+7 tasks engine:
   aggregateGraphs    Validate global graph.json
   verifyDagAcyclic   Check DAG rule violations
   provisionWorkspace Generate workspace setup script
+  apiSchema          Validate openapi.yaml contract
   info               Engine status display
   usage              CLI commands reference
+  augmentOpencode    (US-9.12 codebase-gradle — a faire)
 
 CLI: engine.sh (info/verify/graph/provision/tasks/usage)
+CLI: chatbot.sh (REPL Ollama)
 ----
 
 == Decisions Actees
 
-* Engine est build script only — pas de src/main/kotlin
-* Secrets depuis configuration/ — pattern Spring Cloud Config
-* Engine N3 — personne ne l'importe, il importe tout le monde
-* Pas de publishToMavenLocal pour engine
-* Pas de commit sans "commit" explicite
-* StdoutFormatter vit dans codebase-gradle (N1), pas dans engine
+* Engine build script only — pas de src/main/kotlin
+* Secrets depuis configuration/
+* N3 — jamais importe par N0/N1/N2
+* Zero Groovy dans build.gradle.kts (validation apiSchema en Kotlin pur)
+* StdoutFormatter dans codebase-gradle/rag (N1)
 
 [.text-right]
-*Session 2026-05-11 — generee par la procedure de fin de session 004.*
+*Session 2026-05-11 — generee par la procedure de fin de session 005.*

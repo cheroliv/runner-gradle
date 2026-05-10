@@ -259,6 +259,56 @@ tasks.register("info") {
     }
 }
 
+tasks.register("apiSchema") {
+    group = "engine"
+    description = "Validates the OpenAPI 3.0 contract openapi.yaml for SaaS Edster"
+
+    val contractFile = projectDir.resolve("openapi.yaml")
+
+    doLast {
+        if (!contractFile.exists()) {
+            throw RuntimeException("openapi.yaml not found at ${contractFile.absolutePath}")
+        }
+
+        val content = contractFile.readText()
+
+        val versionMatch = Regex("""^openapi:\s*["']?(\d+\.\d+\.\d+)""", RegexOption.MULTILINE)
+            .find(content) ?: throw RuntimeException("Missing or invalid `openapi:` version")
+        val version = versionMatch.groupValues[1]
+        if (!version.startsWith("3.")) throw RuntimeException("openapi version must be 3.x, got: $version")
+
+        val titleMatch = Regex("""^\s+title:\s*(.+)""", RegexOption.MULTILINE)
+            .find(content) ?: throw RuntimeException("Missing `info.title`")
+        val title = titleMatch.groupValues[1].trim()
+
+        for (path in listOf("/health", "/provision", "/status")) {
+            val quoted = Regex.escape(path)
+            if (!Regex("""^\s+$quoted:""", RegexOption.MULTILINE).containsMatchIn(content))
+                throw RuntimeException("Missing required path: $path")
+        }
+
+        for (schema in listOf(
+            "HealthResponse", "ProvisionRequest", "ProvisionResponse",
+            "StatusResponse", "PluginInfo", "ErrorResponse"
+        )) {
+            val quoted = Regex.escape(schema)
+            if (!Regex("""^\s+$quoted:""", RegexOption.MULTILINE).containsMatchIn(content))
+                throw RuntimeException("Missing required schema: $schema")
+        }
+
+        val pathCount = Regex("""^\s+/[a-z]+""", RegexOption.MULTILINE).findAll(content).count()
+        val schemaCount = Regex("""^\s{4}\w+Response:""", RegexOption.MULTILINE).findAll(content).count() +
+                          Regex("""^\s{4}\w+Request:""", RegexOption.MULTILINE).findAll(content).count() +
+                          Regex("""^\s{4}\w+Info:""", RegexOption.MULTILINE).findAll(content).count() +
+                          Regex("""^\s{4}\w+Error:""", RegexOption.MULTILINE).findAll(content).count()
+
+        println("OpenAPI contract validated: $title")
+        println("  Paths  : $pathCount")
+        println("  Schemas: $schemaCount")
+        println("  OK — ready for SaaS Edster")
+    }
+}
+
 tasks.register("usage") {
     group = "engine"
     description = "Shows available engine commands with usage examples"
