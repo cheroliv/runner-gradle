@@ -6,8 +6,8 @@ _Ontologie spatiale_ : voir `configuration/.agents/AGENT_GOVERNANCE.adoc`
 _DAG_ : N3 — Orchestration (Regle 4bis)
 
 _Derniere mise a jour_ : 2026-05-11
-_Session terminee_ : 5 — ENG-5 Interface API + ENG-6 Chatbot CI/CD
-_Session en cours_ : 6 — ENG-7 Integration engine.sh + ENG-8 Mock /health
+_Session terminee_ : 6 — ENG-7 Integration engine.sh + ENG-8 Mock /health
+_Session en cours_ : 7 — (a definir : ENG-9 serveur HTTP, EPIC 9 codebase-gradle, ou autre)
 
 '''
 == REGLES ABSOLUES (resume)
@@ -23,6 +23,7 @@ _Session en cours_ : 6 — ENG-7 Integration engine.sh + ENG-8 Mock /health
 
 |===
 | # | Date | Type | Sujet | Score
+| 6 | 2026-05-11 | feature | ENG-7 Integration engine.sh + ENG-8 Mock /health | 10/10
 | 5 | 2026-05-11 | feature | ENG-5 Interface API openapi.yaml + apiSchema + ENG-6 Chatbot CI/CD | 10/10
 | 4 | 2026-05-11 | feature | B1 StdoutFormatter [CTX]/[PLAN]/[RESULT] dans codebase-gradle/rag | 10/10
 | 3 | 2026-05-10 | feature | ENG-3 provisionWorkspace + ENG-4 Interface CLI | 10/10
@@ -45,6 +46,8 @@ _Session en cours_ : 6 — ENG-7 Integration engine.sh + ENG-8 Mock /health
 | B1 | `StdoutFormatter` — contrat [CTX]/[PLAN]/[RESULT] (dans codebase-gradle N1) | TERMINE (session 4) | P0
 | ENG-5 | Interface API — endpoint SaaS Edster | TERMINE (session 5) | P2
 | ENG-6 | Chatbot CI/CD conversationnel | TERMINE (session 5) | P2
+| ENG-7 | Integration CLI — engine.sh api/chatbot/health | TERMINE (session 6) | P2
+| ENG-8 | Mock /health endpoint — health.sh JSON | TERMINE (session 6) | P2
 |===
 
 '''

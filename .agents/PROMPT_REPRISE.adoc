@@ -1,60 +1,52 @@
-= PROMPT_REPRISE — Session 006 — Engine
+= PROMPT_REPRISE — Session 007 — Engine
 :toc:
 
 == Contexte de Reprise
 
-*Sessions 0→5 ont realise* :
-- Session 0 : Bootstrap gouvernance agent engine
-- Session 1 : git init + repo GitHub cheroliv/engine
-- Session 2 : ENG-1 aggregateGraphs (21k nodes) + ENG-2 verifyDagAcyclic
-- Session 3 : ENG-3 provisionWorkspace + ENG-4 CLI (engine.sh wrapper)
-- Session 4 : B1 StdoutFormatter [CTX]/[PLAN]/[RESULT] dans codebase-gradle/rag
-- Session 5 : ENG-5 openapi.yaml + task apiSchema + ENG-6 chatbot.sh (REPL Ollama)
+*Sessions 0→6 ont realise* :
+- 0 : Bootstrap gouvernance
+- 1 : git init + repo GitHub
+- 2 : ENG-1 aggregateGraphs + ENG-2 verifyDagAcyclic
+- 3 : ENG-3 provisionWorkspace + ENG-4 CLI
+- 4 : B1 StdoutFormatter [CTX]/[PLAN]/[RESULT] dans codebase-gradle/rag
+- 5 : ENG-5 openapi.yaml + apiSchema + ENG-6 chatbot.sh
+- 6 : ENG-7 Integration engine.sh (api/chatbot/health) + ENG-8 health.sh
 
-== Prochaine etape — Session 006
+== Prochaine etape — Session 007
 
-P0 — ENG-7 : Integration engine.sh (api/chatbot/contract commands)
-P1 — ENG-8 : Mock HTTP /health endpoint (test manuel)
+Option A — Pivot codebase-gradle : US-9.10 CompositeContextBuilder
+Option B — ENG-9 : Vrai serveur HTTP pour /health (Ktor ou http4k minimal)
+Option C — ENG-10 : Provisionnement SaaS via API (POST /provision)
 
-Sous-taches ENG-7 :
-. Ajouter `api` et `chatbot` a engine.sh
-. Ajouter `contract` (lance apiSchema)
-. Mettre a jour usage()
+== Actif des sessions 5-6
 
-Sous-taches ENG-8 :
-. Script `health.sh` qui lit graph.json et retourne le JSON HealthResponse
-. Test manuel : `curl localhost:8080/api/v1/health`
-
-== Actif de la session 005
-
-* `openapi.yaml` — contrat REST Edster (3 endpoints, 6 schemas)
-* `apiSchema` — task Gradle validation Kotlin pure, BUILD SUCCESSFUL
-* `chatbot.sh` — REPL Ollama, prompt N3 francais, /exit /reset
+* `openapi.yaml` — contrat (3 paths, 6 schemas)
+* `apiSchema` — validation Kotlin pure
+* `chatbot.sh` — REPL Ollama, prompt N3 francais
+* `engine.sh` — 8 commandes (info/verify/graph/provision/api/contract/chatbot/health)
+* `health.sh` — JSON HealthResponse (21 plugins, 21k nodes, DAG OK)
 
 == Etat Actuel
 
 [source]
 ----
-7 tasks engine:
-  aggregateGraphs    Validate global graph.json
-  verifyDagAcyclic   Check DAG rule violations
-  provisionWorkspace Generate workspace setup script
-  apiSchema          Validate openapi.yaml contract
-  info               Engine status display
-  usage              CLI commands reference
-  augmentOpencode    (US-9.12 codebase-gradle — a faire)
-
-CLI: engine.sh (info/verify/graph/provision/tasks/usage)
-CLI: chatbot.sh (REPL Ollama)
+CLI: ./engine.sh <command>
+  info       → Engine status + DAG registry
+  verify     → verifyDagAcyclic
+  graph      → aggregateGraphs
+  provision  → provisionWorkspace
+  api|contract → apiSchema (openapi.yaml validation)
+  chatbot [model] → REPL Ollama
+  health     → JSON health endpoint mock
+  tasks      → ./gradlew tasks --group engine
 ----
 
 == Decisions Actees
 
 * Engine build script only — pas de src/main/kotlin
 * Secrets depuis configuration/
-* N3 — jamais importe par N0/N1/N2
-* Zero Groovy dans build.gradle.kts (validation apiSchema en Kotlin pur)
+* Zero Groovy — apiSchema en Kotlin pur
 * StdoutFormatter dans codebase-gradle/rag (N1)
 
 [.text-right]
-*Session 2026-05-11 — generee par la procedure de fin de session 005.*
+*Session 2026-05-11 — generee par la procedure de fin de session 006.*

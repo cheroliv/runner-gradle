@@ -4,6 +4,12 @@
 |===
 | Session | Date | Type | EPIC(s) | Score
 
+| 006
+| 2026-05-11
+| feature
+| ENG-7 Integration engine.sh, ENG-8 Mock /health
+| 10/10 — engine.sh (api/contract/chatbot/health), health.sh (JSON HealthResponse), usage() inline
+
 | 005
 | 2026-05-11
 | feature

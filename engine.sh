@@ -6,7 +6,25 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
 usage() {
-    ./gradlew usage -q
+    cat <<'EOF'
+Engine CLI — Available Commands
+================================
+
+./engine <command>
+
+Commands:
+  info                 Show engine status and DAG registry
+  verify               Run DAG acyclic verification
+  graph                Run aggregateGraphs (requires scanWorkspace)
+  provision            Generate provision.sh for workspace bootstrap
+  api | contract       Validate OpenAPI 3.0 contract (openapi.yaml)
+  chatbot [model]      Start REPL with Ollama (default: deepseek-v4-pro:cloud)
+  health               Return workspace health JSON
+  tasks                List all Gradle tasks (engine + subprojects)
+
+Direct Gradle:
+  ./gradlew <task>     Run any Gradle task directly
+EOF
 }
 
 case "${1:-}" in
@@ -21,6 +39,18 @@ case "${1:-}" in
         ;;
     provision)
         ./gradlew provisionWorkspace -q
+        ;;
+    api)
+        ./gradlew apiSchema -q
+        ;;
+    contract)
+        ./gradlew apiSchema -q
+        ;;
+    chatbot)
+        ./chatbot.sh "${2:-deepseek-v4-pro:cloud}"
+        ;;
+    health)
+        ./health.sh
         ;;
     tasks)
         ./gradlew tasks --group engine

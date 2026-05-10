@@ -1,0 +1,58 @@
+= Session 006 — ENG-7 Integration engine.sh + ENG-8 Mock /health
+:date: 2026-05-11
+:type: feature
+:epics: ENG-7 Integration CLI, ENG-8 Mock /health
+:score: 10/10
+
+== Objectif
+
+ENG-7 : Integrer `api`, `contract`, `chatbot`, `health` dans engine.sh
+ENG-8 : Ecrire `health.sh` — mock /health endpoint conforme au contrat OpenAPI
+
+== Realisations
+
+=== ENG-7 — Integration engine.sh
+
+. Nouvelles commandes dans `engine.sh` :
+  * `api` / `contract` → `./gradlew apiSchema -q` (validation openapi.yaml)
+  * `chatbot [model]` → `./chatbot.sh` (REPL Ollama, modele parametrable)
+  * `health` → `./health.sh` (JSON HealthResponse)
+. `usage()` migre de Gradle vers shell inline (cat heredoc) — plus rapide, zero daemon
+
+=== ENG-8 — Mock /health endpoint
+
+. `health.sh` :
+  * Lit `graph.json` via `jq` (nodes, edges)
+  * Compte les projets du `dagLevels` map (21 projets)
+  * Lance `verifyDagAcyclic` pour le flag `dagHealthy`
+  * Genere JSON conforme a `HealthResponse` du contrat OpenAPI
+  * `chmod +x`
+. Execution :
+[source,json]
+----
+{
+  "status": "UP",
+  "timestamp": "2026-05-10T23:13:26Z",
+  "dagHealthy": true,
+  "graphNodes": 21174,
+  "graphEdges": 22286,
+  "pluginsAvailable": 21,
+  "version": "1.0.0"
+}
+----
+
+== Fichiers crees/modifies
+
+|===
+| Fichier | Action
+| `engine.sh` | Modifie — +api, +contract, +chatbot, +health, usage() inline
+| `health.sh` | Cree — mock /health JSON
+|===
+
+== Dette
+
+Aucune nouvelle dette. Les commandes sont operationnelles.
+
+== Prochaine session
+
+EPIC 9 codebase-gradle US-9.10 (CompositeContextBuilder) ou ENG-9+ (provisionnement SaaS, vrai serveur HTTP).

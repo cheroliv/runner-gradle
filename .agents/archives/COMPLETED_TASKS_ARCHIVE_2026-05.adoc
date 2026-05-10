@@ -1,5 +1,20 @@
 = Taches Terminees Archive — Mai 2026 — Engine
 
+== Session 006 — 2026-05-11
+
+|===
+| EPIC | Tache | Statut
+
+| ENG-7
+| `Integration CLI` — engine.sh + api/contract/chatbot/health
+| ✅ engine.sh 8 commandes, usage() inline shell
+
+| ENG-8
+| `Mock /health` — health.sh JSON HealthResponse
+| ✅ health.sh (jq graph.json + verifyDagAcyclic), 21 plugins, DAG OK
+|===
+
+'''
 == Session 005 — 2026-05-11
 
 |===
