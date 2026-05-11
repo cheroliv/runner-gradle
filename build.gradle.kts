@@ -353,6 +353,109 @@ tasks.register("augmentOpencode") {
     }
 }
 
+tasks.register("assembleCompositeContext") {
+    group = "engine"
+    description = "Pipeline N2→N3: codexRetrieve (cosine similarity pgvector) + codebaseRAG → composite context vector"
+
+    val workspaceRootDir = workspaceRoot
+    val codexDir = foundryDir.resolve("codex-gradle")
+    val codebaseDir = foundryDir.resolve("codebase-gradle")
+    val contextMode = project.findProperty("context") as? String ?: "composite"
+    val query = project.findProperty("query") as? String ?: ""
+    val topK = project.findProperty("topK") as? String ?: "5"
+    val outputDir = layout.buildDirectory.dir("engine")
+
+    doLast {
+        val compositeOutput = outputDir.get().file("composite-context.json").asFile
+        compositeOutput.parentFile.mkdirs()
+
+        val codexEntries = ArrayList<Map<String, Any>>()
+
+        if (contextMode in listOf("composite", "rag")) {
+            if (codexDir.resolve("doc-pipeline").exists()) {
+                val codexBuildDir = File(codexDir, "build/codex")
+                codexBuildDir.mkdirs()
+                val retrieveJson = File(codexBuildDir, "retrieve-results.json")
+
+                println("[engine] codexRetrieve : \"${query.take(80)}\" → pgvector (top-$topK)")
+                val codexProc = ProcessBuilder(listOf(
+                    "./gradlew", "-q", "codexRetrieve",
+                    "-Pquery=$query",
+                    "-PtopK=$topK",
+                    "-PoutputFile=${retrieveJson.absolutePath}"
+                ))
+                    .directory(codexDir)
+                    .redirectErrorStream(true)
+                    .start()
+                val codexExit = codexProc.waitFor()
+                if (codexExit == 0 && retrieveJson.exists()) {
+                    val json = groovy.json.JsonSlurper().parse(retrieveJson)
+                    if (json is List<*>) {
+                        for (item in json) {
+                            if (item is Map<*, *>) {
+                                @Suppress("UNCHECKED_CAST")
+                                val map = item as Map<String, Any>
+                                codexEntries.add(mapOf(
+                                    "source" to "codex",
+                                    "section" to (map["sectionPath"]?.toString() ?: ""),
+                                    "similarity" to ((map["similarity"] as? Number)?.toDouble() ?: 0.0),
+                                    "chunkText" to (map["chunkText"]?.toString() ?: "").take(500)
+                                ))
+                            }
+                        }
+                    }
+                    println("[engine] ✓ codexRetrieve OK — ${codexEntries.size} resultats")
+                } else {
+                    println("[engine] codexRetrieve: pgvector non disponible (exit=$codexExit)")
+                }
+            } else {
+                println("[engine] codex-gradle (N2) non trouve — saute codexRetrieve")
+            }
+        }
+
+        if (contextMode in listOf("composite", "kg")) {
+            val graphFile = workspaceRootDir.resolve("office/graph.json")
+            if (graphFile.exists()) {
+                val graph = groovy.json.JsonSlurper().parse(graphFile)
+                if (graph is Map<*, *>) {
+                    val nodeCount = (graph["nodes"] as? List<*>)?.size ?: 0
+                    val edgeCount = (graph["edges"] as? List<*>)?.size ?: 0
+                    println("[engine] Knowledge Graph: $nodeCount nodes, $edgeCount edges")
+                }
+            }
+        }
+
+        val codebaseContextFile = File("/tmp/opencode-context.txt")
+        if (contextMode in listOf("composite", "sql", "rag")) {
+            val buildFile = codebaseDir.resolve("build.gradle.kts")
+            if (buildFile.exists()) {
+                val hasAugment = buildFile.readText().contains("augmentOpencode")
+                if (hasAugment) {
+                    val cbProc = ProcessBuilder(listOf("./gradlew", "-q", "augmentOpencode"))
+                        .directory(codebaseDir)
+                        .redirectErrorStream(true)
+                        .start()
+                    cbProc.waitFor()
+                }
+            }
+        }
+
+        val result = mapOf(
+            "query" to query,
+            "mode" to contextMode,
+            "codexResults" to codexEntries,
+            "codebaseContextPath" to (if (codebaseContextFile.exists()) codebaseContextFile.absolutePath else ""),
+            "timestamp" to System.currentTimeMillis()
+        )
+
+        compositeOutput.writeText(
+            groovy.json.JsonOutput.prettyPrint(groovy.json.JsonOutput.toJson(result))
+        )
+
+        println("[engine] ✓ assembleCompositeContext — ${codexEntries.size} codex + codebase → ${compositeOutput.absolutePath}")
+    }
+}
+
 tasks.register("usage") {
     group = "engine"
     description = "Shows available engine commands with usage examples"

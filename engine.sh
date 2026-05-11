@@ -21,6 +21,7 @@ Commands:
   chatbot [model]      Start REPL with Ollama (default: deepseek-v4-pro:cloud)
   health               Return workspace health JSON
   augment              Run augmentOpencode pipeline -> /tmp/opencode-context.txt
+  assemble [query]     Run assembleCompositeContext N2→N3 (codexRetrieve + codebaseRAG)
   tasks                List all Gradle tasks (engine + subprojects)
 
 Direct Gradle:
@@ -55,6 +56,9 @@ case "${1:-}" in
         ;;
     augment)
         ./gradlew augmentOpencode -q
+        ;;
+    assemble)
+        ./gradlew assembleCompositeContext -Pquery="${2:-}" -q
         ;;
     tasks)
         ./gradlew tasks --group engine
