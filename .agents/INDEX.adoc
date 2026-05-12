@@ -5,9 +5,10 @@ _Regles absolues_ : voir `AGENT.adoc`
 _Ontologie spatiale_ : voir `configuration/.agents/AGENT_GOVERNANCE.adoc`
 _DAG_ : N3 — Orchestration (Regle 4bis)
 
-_Derniere mise a jour_ : 2026-05-11
-_Session terminee_ : 10 — A3 CI/CD Workflow deploye sur 3 projets
-_Session en cours_ : 11 — (a definir)
+_Derniere mise a jour_ : 2026-05-12
+_Session terminee_ : 11 — EPIC B Engine Clean (3 pts, 3 US) TERMINE
+_Session en cours_ : 12 — (a definir)
+_Session precedente_ : 011 ✅ — EPIC B Engine Clean (3 pts, 3 US)
 
 '''
 == REGLES ABSOLUES (resume)
@@ -23,6 +24,7 @@ _Session en cours_ : 11 — (a definir)
 
 |===
 | # | Date | Type | Sujet | Score
+| 11 | 2026-05-12 | cleanup | EPIC B Engine Clean — verifyDagAcyclic → graphify-plugin, remove aggregateGraphs/augmentOpencode | 10/10
 | 10 | 2026-05-11 | infra | A3 CI/CD Template .github/workflows/test.yml deploye sur 3 projets | 10/10
 | 9 | 2026-05-11 | leçon | L10 — Compilation AVANT chaque commit + fix augmentOpencode | 10/10
 | 8 | 2026-05-11 | feature | augmentOpencode — derniere tache cible du contrat | 10/10
@@ -56,6 +58,7 @@ _Session en cours_ : 11 — (a definir)
 | ENG-9 | `augmentOpencode` — derniere tache cible contrat | TERMINE (session 8) | P0
 | L10 | Lecon — Compilation AVANT chaque commit | TERMINE (session 9) | P0
 | A3 | CI/CD Workflow GitHub Actions — Template deploye quizz-benchmark/graphify-gradle/payment-scaffold | TERMINE (session 10) | P1
+| EPIC B | Engine Clean — ENG-C1 Migrer verifyDagAcyclic → graphify-plugin, ENG-C2 Supprimer aggregateGraphs/augmentOpencode, ENG-C3 engine = 4 taches, zero logique metier | TERMINE (session 11) | P0
 |===
 
 '''
@@ -85,4 +88,5 @@ _Session en cours_ : 11 — (a definir)
 | `bakery-gradle` | N2 | Site architecture, pages statiques
 | `readme-gradle` | N2 | README formate multilangues
 | `training-gradle` | N2 | Extraction referentiels AFNOR/REAC
+| `waiter-gradle` | N2 | Point d'entree unique fonderie (consommateur waiter-plugin)
 |===

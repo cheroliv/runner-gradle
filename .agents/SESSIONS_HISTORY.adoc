@@ -4,6 +4,13 @@
 |===
 | Session | Date | Type | EPIC(s) | Score
 
+
+| 011
+| 2026-05-12
+| cleanup
+| EPIC B — Engine Clean
+| 10/10 — verifyDagAcyclic migre vers graphify-gradle N0, aggregateGraphs/augmentOpencode supprimes, engine = 4 taches, zero logique metier
+
 | 010
 | 2026-05-11
 | infra

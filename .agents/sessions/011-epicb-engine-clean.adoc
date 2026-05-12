@@ -1,0 +1,87 @@
+= Session 011 — EPIC B Engine Clean
+:date: 2026-05-12
+:type: cleanup
+:epic: EPIC B
+:score: 10/10
+
+== Objectif
+
+Nettoyer engine N3 : toute la logique metier deleguee aux plugins proprietaires (N0/N1/N2).
+Le consommateur N3 ne contient que des appels de taches, pas de logique.
+
+== ENG-C1 — Migrer verifyDagAcyclic → graphify-plugin (N0)
+
+=== Code
+
+- `VerifyDagAcyclicTask.kt` : 103 lignes, detection violations DAG, resolution flexible des noms
+  (suffixes -gradle/-plugin, normalisation underscore/dash, Properties file support)
+- `GraphifyExtension.kt` : + dagLevels (MapProperty<String, Int>), + dagLevelsPropsFile (Property<String>)
+- `GraphifyPlugin.kt` : registration verifyDagAcyclic avec transfert des props
+
+=== Tests
+
+`VerifyDagAcyclicTaskTest.kt` : 14 tests
+- should pass when DAG is acyclic
+- should fail when N1 imports N2
+- should fail when N0 imports N3
+- should pass on empty foundry directory
+- should skip directories without build gradle kts
+- should skip directories not in dagLevels registry
+- should pass with multiple same-level imports
+- should detect violation regardless of version string
+- should use custom dagLevels configuration
+- should pass with no violations in mixed setup
+- should resolve plugin id suffixes correctly
+- should detect violation with suffix resolution
+- levelOf should find by key then by suffixed variants
+- should resolve project names with underscores correctly (magic_stick <-> magic-stick)
+
+Resultat : 57/57 PASS (all existing + new)
+
+== ENG-C2 — Supprimer taches redondantes d'engine
+
+Taches supprimees de `build.gradle.kts` :
+- `aggregateGraphs` — redondant, scanWorkspace suffit
+- `augmentOpencode` — deja dans codebase-gradle US-9.12
+- `usage` — fusionne avec info
+
+`foundryDir` stale dans graphify extension → corrige
+
+== ENG-C3 — Resultat final
+
+Engine build.gradle.kts : 348 lignes, 4 tasks.register()
+Taches engine group : scanWorkspace (N0), verifyDagAcyclic (N0), provisionWorkspace (N3), info (N3)
++ apiSchema, assembleCompositeContext
+
+Contrat DAG respecte : zero logique metier dans le consommateur N3.
+
+== Fichiers modifies/moves
+
+[cols="2,3"]
+|===
+| Fichier | Action
+
+| `graphify-gradle/.../GraphifyExtension.kt`
+| +dagLevels, +dagLevelsPropsFile
+
+| `graphify-gradle/.../GraphifyPlugin.kt`
+| +verifyDagAcyclic registration
+
+| `graphify-gradle/.../VerifyDagAcyclicTask.kt`
+| NEW — 103 lignes
+
+| `graphify-gradle/.../VerifyDagAcyclicTaskTest.kt`
+| NEW — 14 tests
+
+| `engine/build.gradle.kts`
+| -aggregateGraphs, -augmentOpencode, -usage, nettoyage
+
+| `engine/AGENT.adoc`
+| Mise a jour taches cibles
+
+| `engine/.agents/INDEX.adoc`
+| +EPIC B, +session 11
+
+| `engine/PROMPT_REPRISE.adoc`
+| NEW — contexte reprise session 012
+|===

@@ -125,3 +125,22 @@
 | Bootstrap graphify-gradle (N0)
 | ✅ Plugin `com.cheroliv.graphify:0.0.1` dans mavenLocal
 |===
+
+'''
+== Session 011 — 2026-05-12
+
+|===
+| EPIC | Tache | Statut
+
+| EPIC B
+| `ENG-C1` — Migrer verifyDagAcyclic → graphify-plugin (N0), avec ses tests
+| ✅ VerifyDagAcyclicTask.kt (103 lignes), levelOf resolution flexible, 14 tests, 57/57 PASS
+
+| EPIC B
+| `ENG-C2` — Supprimer aggregateGraphs (redondant), supprimer augmentOpencode (→ codebase-gradle US-9.12)
+| ✅ -aggregateGraphs, -augmentOpencode, -usage supprimes de build.gradle.kts, dagLevels dans graphify{}
+
+| EPIC B
+| `ENG-C3` — engine = 4 taches / 348 lignes, zero logique metier, zero test
+| ✅ Contrat DAG respecte : la charge de la preuve est sur le plugin proprietaire
+|===
