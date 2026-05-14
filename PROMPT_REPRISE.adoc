@@ -1,23 +1,26 @@
-= PROMPT_REPRISE — Engine Session 012
+= PROMPT_REPRISE — Engine Session 013
 :toc:
 
-== Mission session 012
+== Mission session 013
 
-*Etat* : EPIC B TERMINE (session 11). Engine propre, 4 taches, zero logique metier.
-*Prochaine session* : 012 — a definir.
+*Etat* : EPIC F TERMINE (session 13). Template CI unifié déployé sur 5 boroughs.
+*Prochaine session* : 014 — a definir.
 
 == Contexte
 
-- EPIC B Engine Clean TERMINE : verifyDagAcyclic migre vers graphify-gradle N0, aggregateGraphs et augmentOpencode supprimes d'engine
-- Engine = 4 taches : scanWorkspace (graphify N0), verifyDagAcyclic (graphify N0), provisionWorkspace (engine N3), info (engine N3) + apiSchema + assembleCompositeContext
-- Contrat DAG respecte : la charge de la preuve est sur le plugin proprietaire (N0/N1/N2), pas sur le consommateur (N3)
+- Template `test.yml` standard (JUnit + JDK 24 + Gradle) déployé sur codebase, planner, training, waiter, plantuml
+- 7/8 boroughs ont CI. Magic-stick sans CI par design (site statique).
+- Compilation planner-gradle KO (dépendance langchain4j manquante, préexistant)
+- Workspace PROMPT_REPRISE.adoc corrigé (désynchronisé depuis 12 mai)
 
-== Fichiers modifies session 11
+== Fichiers modifies session 13
 
-- graphify-plugin/src/main/kotlin/.../GraphifyExtension.kt (+dagLevels, +dagLevelsPropsFile)
-- graphify-plugin/src/main/kotlin/.../GraphifyPlugin.kt (+verifyDagAcyclic registration)
-- graphify-plugin/src/main/kotlin/.../VerifyDagAcyclicTask.kt (new, 103 lines, levelOf resolution flexible)
-- graphify-plugin/src/test/.../VerifyDagAcyclicTaskTest.kt (new, 14 tests)
-- engine/build.gradle.kts (-aggregateGraphs -verifyDagAcyclic -augmentOpencode -usage, +dagLevels in graphify extension)
-- engine/AGENT.adoc (mise a jour taches cibles)
-- engine/.agents/INDEX.adoc (+EPIC B, +session 11)
+- codebase-gradle/.github/workflows/test.yml (new)
+- planner-gradle/.github/workflows/test.yml (new)
+- training-gradle/training-plugin/.github/workflows/test.yml (new)
+- waiter-gradle/waiter-plugin/.github/workflows/test.yml (new)
+- plantuml-gradle/.github/workflows/test.yml (new)
+- workspace/PROMPT_REPRISE.adoc (corrigé désync)
+- engine/.agents/INDEX.adoc (+EPIC F, +session 13)
+- engine/.agents/sessions/013-epicf-ci-unifie.adoc (new)
+- engine/.agents/SESSIONS_HISTORY.adoc (+session 13)

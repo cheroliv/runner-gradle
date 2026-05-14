@@ -5,10 +5,10 @@ _Regles absolues_ : voir `AGENT.adoc`
 _Ontologie spatiale_ : voir `configuration/.agents/AGENT_GOVERNANCE.adoc`
 _DAG_ : N3 — Orchestration (Regle 4bis)
 
-_Derniere mise a jour_ : 2026-05-12
-_Session terminee_ : 012 — Code Review Globale + règle terminal consommateur
-_Session en cours_ : 013 — (a definir)
-_Session precedente_ : 011 ✅ — EPIC B Engine Clean (3 pts, 3 US)
+_Derniere mise a jour_ : 2026-05-14
+_Session terminee_ : 013 — EPIC F Template CI Unifié (5 boroughs déployés)
+_Session en cours_ : 014 — (a definir)
+_Session precedente_ : 012 — Code Review Globale + règle terminal consommateur
 
 '''
 == REGLES ABSOLUES (resume)
@@ -24,6 +24,8 @@ _Session precedente_ : 011 ✅ — EPIC B Engine Clean (3 pts, 3 US)
 
 |===
 | # | Date | Type | Sujet | Score
+| 13 | 2026-05-14 | infra | EPIC F — Template CI unifié déployé sur 5 boroughs (codebase, planner, training, waiter, plantuml) | 10/10
+| 12 | 2026-05-12 | governance | Code Review Globale + règle terminal consommateur | 10/10
 | 11 | 2026-05-12 | cleanup | EPIC B Engine Clean — verifyDagAcyclic → graphify-plugin, remove aggregateGraphs/augmentOpencode | 10/10
 | 10 | 2026-05-11 | infra | A3 CI/CD Template .github/workflows/test.yml deploye sur 3 projets | 10/10
 | 9 | 2026-05-11 | leçon | L10 — Compilation AVANT chaque commit + fix augmentOpencode | 10/10
@@ -45,8 +47,8 @@ _Session precedente_ : 011 ✅ — EPIC B Engine Clean (3 pts, 3 US)
 | EPIC | Description | Statut | Priorite
 | ENG-0 | Bootstrap gouvernance agent engine | TERMINE | P0
 | ENG-100 | git init + repo GitHub cheroliv/engine + push | TERMINE (session 1) | P0
-| ENG-1 | `aggregateGraphs` — agregation globale graph.json | TERMINE (session 2) | P0
-| ENG-2 | `verifyDagAcyclic` — verification DAG inter-plugins | TERMINE (session 2) | P0
+| ENG-1 | `aggregateGraphs` — agregation globale graph.json | TERMINE (session 2) → SUPPRIME (session 11) | P0
+| ENG-2 | `verifyDagAcyclic` — verification DAG inter-plugins | TERMINE (session 2) → MIGRE vers graphify N0 (session 11) | P0
 | ENG-3 | `provisionWorkspace` — provisionnement workspace client | TERMINE (session 3) | P1
 | ENG-4 | Interface CLI — commandes utilisateur | TERMINE (session 3) | P1
 | B1 | `StdoutFormatter` — contrat [CTX]/[PLAN]/[RESULT] (dans codebase-gradle N1) | TERMINE (session 4) | P0
@@ -55,10 +57,11 @@ _Session precedente_ : 011 ✅ — EPIC B Engine Clean (3 pts, 3 US)
 | ENG-7 | Integration CLI — engine.sh api/chatbot/health | TERMINE (session 6) | P2
 | ENG-8 | Mock /health endpoint — health.sh JSON | TERMINE (session 6) | P2
 | L09 | Lecon — Engine N3 consommateur, pas serveur HTTP | TERMINE (session 7) | P0
-| ENG-9 | `augmentOpencode` — derniere tache cible contrat | TERMINE (session 8) | P0
+| ENG-9 | `augmentOpencode` — derniere tache cible contrat | TERMINE (session 8) → SUPPRIME (session 11) | P0
 | L10 | Lecon — Compilation AVANT chaque commit | TERMINE (session 9) | P0
 | A3 | CI/CD Workflow GitHub Actions — Template deploye quizz-benchmark/graphify-gradle/payment-scaffold | TERMINE (session 10) | P1
 | EPIC B | Engine Clean — ENG-C1 Migrer verifyDagAcyclic → graphify-plugin, ENG-C2 Supprimer aggregateGraphs/augmentOpencode, ENG-C3 engine = 4 taches, zero logique metier | TERMINE (session 11) | P0
+| EPIC F | Template CI Unifié — Déploiement test.yml standard sur 5 boroughs restants (codebase, planner, training, waiter, plantuml) | TERMINE (session 13) | P1
 |===
 
 '''
@@ -66,13 +69,13 @@ _Session precedente_ : 011 ✅ — EPIC B Engine Clean (3 pts, 3 US)
 
 |===
 | Fichier | Etat
-| `AGENT.adoc` | ✅ Cree (bootstrap 2026-05-05)
-| `.agents/INDEX.adoc` | ✅ A jour (session 1)
-| `.agents/PROMPT_REPRISE.adoc` | ✅ A jour (session 1→2)
-| `.agents/SESSION_PROCEDURE.adoc` | ✅ Cree (bootstrap 2026-05-05)
-| `.gitignore` | ✅ Cree
-| `build.gradle.kts` | ✅ ENG-1/ENG-2 implementes, graphify applique
-| `settings.gradle.kts` | ✅ mavenLocal() + gradlePluginPortal()
+| `AGENT.adoc` | ✅ A jour (session 11)
+| `.agents/INDEX.adoc` | ✅ A jour (session 13)
+| `.agents/PROMPT_REPRISE.adoc` | ✅ A jour (session 13)
+| `.agents/SESSION_PROCEDURE.adoc` | ✅ (bootstrap 2026-05-05)
+| `.gitignore` | ✅
+| `build.gradle.kts` | ✅ 348 lignes (4 taches)
+| `settings.gradle.kts` | ✅
 | `repo GitHub` | ✅ https://github.com/cheroliv/engine (private)
 |===
 
@@ -82,7 +85,7 @@ _Session precedente_ : 011 ✅ — EPIC B Engine Clean (3 pts, 3 US)
 |===
 | Projet importe | Niveau | Usage dans engine
 | `graphify-gradle` | N0 | Scan workspace → graph.json local
-| `codebase-gradle` | N1 | RAG pgvector, anonymisation, augmentOpencode
+| `codebase-gradle` | N1 | RAG pgvector, anonymisation
 | `plantuml-gradle` | N2 | Diagrammes KG globaux
 | `slider-gradle` | N2 | Slides Reveal.js avec RAG transverse
 | `bakery-gradle` | N2 | Site architecture, pages statiques

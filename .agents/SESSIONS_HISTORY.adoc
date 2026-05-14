@@ -77,4 +77,10 @@
 | ENG-0
 | — Bootstrap gouvernance agent engine
 |===
+| 013
+| 2026-05-14
+| infra
+| EPIC F — Template CI Unifié (5 boroughs)
+| 10/10 — test.yml déployé sur codebase, planner, training, waiter, plantuml. 7/8 boroughs couverts.
+
 | 012 | 2026-05-12 | governance | Code Review Globale + règle terminal consommateur | 10/10

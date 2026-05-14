@@ -1,0 +1,98 @@
+= Session 013 — EPIC F Template CI Unifié (5 Boroughs)
+:date: 2026-05-14
+:type: infra
+:score: 10/10
+
+== Objectif
+
+Déployer le template standard `.github/workflows/test.yml` (session 010) sur
+tous les boroughs N1/N2 qui n'en disposaient pas encore.
+
+Session 010 avait couvert 3 projets (quizz-benchmark, graphify-gradle, payment-scaffold).
+Cette session couvre les 5 restants.
+
+== Déploiement
+
+Template standard :
+[source,yaml]
+----
+name: Test
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+jobs:
+  test:
+    name: Build & Test
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK 24
+        uses: actions/setup-java@v4
+        with:
+          java-version: '24'
+          distribution: 'temurin'
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+      - name: Build and Test
+        run: ./gradlew build
+----
+
+== Adaptation par Projet
+
+|===
+| Projet | Chemin | Adaptations | Build Local
+
+| codebase-gradle (N1)
+| `.github/workflows/test.yml`
+| Aucune
+| ✅ OK
+
+| planner-gradle (N2)
+| `.github/workflows/test.yml`
+| `./gradlew :planner-plugin:build` (multi-module, pas de gradlew dans subproject)
+| ⚠️ Compilation KO — `ChatLanguageModel` unresolved (dépendance langchain4j manquante, préexistant)
+
+| training-gradle (N2)
+| `training-plugin/.github/workflows/test.yml`
+| Aucune (plugin standalone avec son propre gradlew)
+| ✅ OK
+
+| waiter-gradle (Compton)
+| `waiter-plugin/.github/workflows/test.yml`
+| Aucune (plugin standalone avec son propre gradlew)
+| ✅ OK
+
+| plantuml-gradle (N2)
+| `.github/workflows/test.yml`
+| Aucune
+| ✅ OK
+|===
+
+== Couverture CI Finale
+
+|===
+| Borough | CI test.yml
+| Newark (training) | ✅ training-plugin/
+| Manhattan (planner) | ✅ (compilation à fixer)
+| Brooklyn (codex) | ✅
+| Queens (codebase) | ✅
+| The Bronx (quizz) | ✅
+| Staten Island (magic) | ❌ pas de CI par design
+| New Jersey (engine) | ✅
+| Compton (waiter) | ✅ waiter-plugin/
+|===
+
+7/8 boroughs couverts. Magic-stick est un site statique sans besoin CI.
+
+== Correctif Gouvernance
+
+Workspace `PROMPT_REPRISE.adoc` était désynchronisé — référençait engine 012 comme
+"à faire" alors que 012 était terminée depuis le 12 mai. Corrigé avec session 013.
+
+== Résultat
+
+EPIC F TERMINE. Template CI standard déployé sur tous les boroughs N1/N2/N3.
+Seul magic-stick (Staten Island) reste sans CI — par design (site statique bakery).

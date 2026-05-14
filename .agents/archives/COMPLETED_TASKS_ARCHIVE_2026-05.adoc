@@ -151,3 +151,34 @@
 | `ENG-C3` — engine = 4 taches / 348 lignes, zero logique metier, zero test
 | ✅ Contrat DAG respecte : la charge de la preuve est sur le plugin proprietaire
 |===
+
+'''
+== Session 013 — 2026-05-14
+
+|===
+| EPIC | Tache | Statut
+
+| EPIC F
+| `Template CI Unifié` — test.yml → codebase-gradle (N1)
+| ✅ build OK
+
+| EPIC F
+| `Template CI Unifié` — test.yml → planner-gradle (N2)
+| ✅ déployé (compilation KO préexistante langchain4j)
+
+| EPIC F
+| `Template CI Unifié` — test.yml → training-gradle (N2, training-plugin/)
+| ✅ build OK
+
+| EPIC F
+| `Template CI Unifié` — test.yml → waiter-gradle (Compton, waiter-plugin/)
+| ✅ build OK
+
+| EPIC F
+| `Template CI Unifié` — test.yml → plantuml-gradle (N2)
+| ✅ build OK
+
+| N/A
+| `Correction` — Workspace PROMPT_REPRISE.adoc désynchronisé (session 012 référencée comme "à faire")
+| ✅ corrigé avec session 013
+|===
