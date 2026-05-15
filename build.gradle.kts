@@ -1,5 +1,15 @@
-import groovy.json.JsonSlurper
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.fasterxml.jackson.module.kotlin.readValue
 import java.io.File
+
+buildscript {
+    repositories.mavenCentral()
+    dependencies {
+        classpath("com.fasterxml.jackson.module:jackson-module-kotlin:2.18.3")
+        classpath("com.fasterxml.jackson.core:jackson-databind:2.18.3")
+    }
+}
 
 plugins {
     id("com.cheroliv.bakery") version "0.1.4"
@@ -27,6 +37,7 @@ val dagLevels = mapOf(
     "readme-gradle" to 2,
     "slider-gradle" to 2,
     "training-gradle" to 2,
+    "capsule-gradle" to 2,
     "engine" to 3,
     "waiter-plugin" to 2,
     "office-template" to 2,
@@ -208,6 +219,7 @@ tasks.register("assembleCompositeContext") {
     val workspaceRootDir = workspaceRoot
     val codexDir = foundryDir.resolve("codex-gradle")
     val trainingDir = foundryDir.resolve("training-gradle")
+    val capsuleDir = foundryDir.resolve("capsule-gradle")
     val codebaseDir = foundryDir.resolve("codebase-gradle")
     val contextMode = project.findProperty("context") as? String ?: "composite"
     val query = project.findProperty("query") as? String ?: ""
@@ -238,7 +250,8 @@ tasks.register("assembleCompositeContext") {
                     .start()
                 val codexExit = codexProc.waitFor()
                 if (codexExit == 0 && retrieveJson.exists()) {
-                    val json = groovy.json.JsonSlurper().parse(retrieveJson)
+                    val mapper = jacksonObjectMapper()
+                    val json: Any = mapper.readValue(retrieveJson)
                     if (json is List<*>) {
                         for (item in json) {
                             if (item is Map<*, *>) {
@@ -283,7 +296,8 @@ tasks.register("assembleCompositeContext") {
                     .start()
                 val trainExit = trainProc.waitFor()
                 if (trainExit == 0 && retrieveJson.exists()) {
-                    val json = JsonSlurper().parse(retrieveJson)
+                    val mapper = jacksonObjectMapper()
+                    val json: Any = mapper.readValue(retrieveJson)
                     if (json is List<*>) {
                         for (item in json) {
                             if (item is Map<*, *>) {
@@ -308,10 +322,57 @@ tasks.register("assembleCompositeContext") {
             }
         }
 
+        val capsuleEntries = ArrayList<Map<String, Any>>()
+
+        if (contextMode in listOf("composite")) {
+            val capsulePluginDir = capsuleDir.resolve("capsule-plugin")
+            if (capsulePluginDir.exists()) {
+                println("[engine] capsuleCompositeContext")
+                val capProc = ProcessBuilder(listOf(
+                    "./gradlew", "-q", "capsulecompositecontext"
+                ))
+                    .directory(capsulePluginDir)
+                    .redirectErrorStream(true)
+                    .start()
+                val capExit = capProc.waitFor()
+                val capsuleJsonFile = File(capsulePluginDir, "build/capsule/capsule-context.json")
+                if (capExit == 0 && capsuleJsonFile.exists()) {
+                    val mapper = jacksonObjectMapper()
+                    val json: Any = mapper.readValue(capsuleJsonFile)
+                    if (json is Map<*, *>) {
+                        @Suppress("UNCHECKED_CAST")
+                        val map = json as Map<String, Any>
+                        val entries = map["entries"] as? List<*> ?: emptyList<Any>()
+                        for (entry in entries) {
+                            if (entry is Map<*, *>) {
+                                @Suppress("UNCHECKED_CAST")
+                                val em = entry as Map<String, Any>
+                                capsuleEntries.add(mapOf(
+                                    "source" to "capsule",
+                                    "deckName" to (em["deckName"]?.toString() ?: ""),
+                                    "slideCount" to ((em["slideCount"] as? Number)?.toInt() ?: 0),
+                                    "originalVideo" to (em["originalVideo"]?.toString() ?: ""),
+                                    "distribVideo" to (em["distribVideo"]?.toString() ?: ""),
+                                    "ttsEngine" to (em["ttsEngine"]?.toString() ?: ""),
+                                    "ttsVoice" to (em["ttsVoice"]?.toString() ?: "")
+                                ))
+                            }
+                        }
+                    }
+                    println("[engine] OK capsuleCompositeContext OK - ${capsuleEntries.size} decks")
+                } else {
+                    println("[engine] capsuleCompositeContext: capsule not available (exit=$capExit)")
+                }
+            } else {
+                println("[engine] capsule-gradle (N2) not found - skipping capsuleCompositeContext")
+            }
+        }
+
         if (contextMode in listOf("composite", "kg")) {
             val graphFile = workspaceRootDir.resolve("office/graph.json")
             if (graphFile.exists()) {
-                val graph = groovy.json.JsonSlurper().parse(graphFile)
+                val mapper = jacksonObjectMapper()
+                val graph: Any = mapper.readValue(graphFile)
                 if (graph is Map<*, *>) {
                     val nodeCount = (graph["nodes"] as? List<*>)?.size ?: 0
                     val edgeCount = (graph["edges"] as? List<*>)?.size ?: 0
@@ -340,14 +401,16 @@ tasks.register("assembleCompositeContext") {
             "mode" to contextMode,
             "codexResults" to codexEntries,
             "trainingResults" to trainingEntries,
+            "capsuleResults" to capsuleEntries,
             "codebaseContextPath" to (if (codebaseContextFile.exists()) codebaseContextFile.absolutePath else ""),
             "timestamp" to System.currentTimeMillis()
         )
 
+        val mapper = jacksonObjectMapper()
         compositeOutput.writeText(
-            groovy.json.JsonOutput.prettyPrint(groovy.json.JsonOutput.toJson(result))
+            mapper.writerWithDefaultPrettyPrinter().writeValueAsString(result)
         )
 
-        println("[engine] OK assembleCompositeContext - ${codexEntries.size} codex + ${trainingEntries.size} training + codebase -> ${compositeOutput.absolutePath}")
+        println("[engine] OK assembleCompositeContext - ${codexEntries.size} codex + ${trainingEntries.size} training + ${capsuleEntries.size} capsule + codebase -> ${compositeOutput.absolutePath}")
     }
 }
