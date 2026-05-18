@@ -44,7 +44,6 @@ val dagLevels = mapOf(
     "jhipster-gradle-plugins" to 2,
     "notebook-gradle" to 2,
     "newpipe-gradle" to 2,
-    "saas-deploy-gradle" to 2,
     "scripts" to 2,
     "site" to 2
 )
@@ -65,7 +64,6 @@ val pluginRepos = mapOf(
     "jhipster-gradle-plugins" to "jhipster-gradle-plugins",
     "notebook-gradle" to "notebook-gradle",
     "newpipe-gradle" to "newpipe-gradle",
-    "saas-deploy-gradle" to "saas-deploy-gradle",
     "magic-stick" to "magic-stick",
     "engine" to "engine"
 )
