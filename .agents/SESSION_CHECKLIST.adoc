@@ -1,0 +1,55 @@
+= SESSION_CHECKLIST — engine
+:toc:
+
+== Hook d'Ouverture (debut de session)
+
+. PROMPT_REPRISE injecte par opencode — ne pas lire localement
+. Lire `AGENT.adoc` — regles absolues
+. Lire `.agents/INDEX.adoc` — roadmap + statut EPICs
+. `git status`
+. `./gradlew tasks` (verifier taches disponibles)
+. Verifier que le build compile avant de coder
+
+== Hook de Fermeture (fin de session)
+
+Procedure 6 etapes obligatoire :
+
+[cols="2,3,3"]
+|===
+| Etape | Action | Fichier
+
+| 1
+| Rapport de session
+| `.agents/sessions/NNN-sujet.adoc`
+
+| 2
+| Contexte reprise
+| `configuration/.agents/PROMPT_REPRISE.adoc` (max 70 lignes)
+
+| 3
+| Dashboard
+| `.agents/INDEX.adoc` (session N+1, roadmap, statut EPICs)
+
+| 4
+| Historique
+| `.agents/SESSIONS_HISTORY.adoc` (ajouter entree)
+
+| 5
+| Tests
+| Aucun — Engine est un terminal consommateur sans tests
+
+| 6
+| Archivage
+| `.agents/archives/COMPLETED_TASKS_ARCHIVE_{mois}.adoc`
+|===
+
+*REGLE CRITIQUE* : Aucune etape ne peut etre marquee OK si le fichier n'a pas ete effectivement modifie et verifie.
+
+== Commandes de Verification
+
+[source,shell]
+----
+git status
+grep -r "TOKEN\|SECRET\|PASSWORD\|API_KEY\|gho_\|ghp_" --include="*.kts" --include="*.yml"
+./gradlew compileKotlin
+----
