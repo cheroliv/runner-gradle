@@ -4,6 +4,12 @@
 |===
 | Session | Date | Type | EPIC(s) | Score
 
+| 017
+| 2026-05-19
+| feat
+| Pipeline N0→N3 ABC — Wiring graphify (N0) + codebase (N1) dans collectCompositeContext. Phase 0 graphify scan + Phase 4 codebase pgvector RAG. Hack augmentOpencode supprime.
+| 10/10
+
 | 016
 | 2026-05-19
 | migration

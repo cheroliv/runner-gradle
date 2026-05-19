@@ -212,9 +212,10 @@ tasks.register("generateApiSchema") {
 
 tasks.register("collectCompositeContext") {
     group = "collect"
-    description = "Pipeline N2->N3: codexRetrieve (cosine similarity pgvector) + codebaseRAG -> composite context vector"
+    description = "Pipeline N0→N3 complet : graphify scan (N0) + codebaseRAG (N1) + codex/training/capsule (N2) → composite context vector"
 
     val workspaceRootDir = workspaceRoot
+    val graphifyDir = foundryDir.resolve("graphify-gradle")
     val codexDir = foundryDir.resolve("codex-gradle")
     val trainingDir = foundryDir.resolve("training-gradle")
     val capsuleDir = foundryDir.resolve("capsule-gradle")
@@ -223,11 +224,46 @@ tasks.register("collectCompositeContext") {
     val query = project.findProperty("query") as? String ?: ""
     val topK = project.findProperty("topK") as? String ?: "5"
     val outputDir = layout.buildDirectory.dir("engine")
+    val skipGraphify = project.findProperty("skipGraphify")?.toString()?.toBoolean() ?: false
 
     doLast {
         val compositeOutput = outputDir.get().file("composite-context.json").asFile
         compositeOutput.parentFile.mkdirs()
 
+        // ── Phase 0: Graphify — Knowledge Graph (N0) ──
+        val graphifyEntries = ArrayList<Map<String, Any>>()
+
+        if (!skipGraphify && graphifyDir.resolve("build.gradle.kts").exists()) {
+            println("[engine] collectFromWorkspace (N0 — graphify) : scanning workspace → graph.json")
+            val gfProc = ProcessBuilder(listOf("./gradlew", "-q", "collectFromWorkspace"))
+                .directory(graphifyDir)
+                .redirectErrorStream(true)
+                .start()
+            val gfExit = gfProc.waitFor()
+            val graphFile = workspaceRootDir.resolve("office/graph.json")
+            if (gfExit == 0 && graphFile.exists()) {
+                val mapper = jacksonObjectMapper()
+                val graph: Any = mapper.readValue(graphFile)
+                if (graph is Map<*, *>) {
+                    @Suppress("UNCHECKED_CAST")
+                    val g = graph as Map<String, Any>
+                    val nodeCount = (g["nodes"] as? List<*>)?.size ?: 0
+                    val edgeCount = (g["edges"] as? List<*>)?.size ?: 0
+                    println("[engine] OK collectFromWorkspace OK — $nodeCount nodes, $edgeCount edges")
+                    graphifyEntries.add(mapOf(
+                        "source" to "graphify",
+                        "nodes" to nodeCount,
+                        "edges" to edgeCount
+                    ))
+                }
+            } else {
+                println("[engine] collectFromWorkspace : échec (exit=$gfExit)")
+            }
+        } else if (skipGraphify) {
+            println("[engine] collectFromWorkspace : skipped (--skipGraphify)")
+        }
+
+        // ── Phase 1: Codex (N2) — pgvector cosine similarity ──
         val codexEntries = ArrayList<Map<String, Any>>()
 
         if (contextMode in listOf("composite", "rag")) {
@@ -366,30 +402,62 @@ tasks.register("collectCompositeContext") {
             }
         }
 
-        if (contextMode in listOf("composite", "kg")) {
-            val graphFile = workspaceRootDir.resolve("office/graph.json")
-            if (graphFile.exists()) {
-                val mapper = jacksonObjectMapper()
-                val graph: Any = mapper.readValue(graphFile)
-                if (graph is Map<*, *>) {
-                    val nodeCount = (graph["nodes"] as? List<*>)?.size ?: 0
-                    val edgeCount = (graph["edges"] as? List<*>)?.size ?: 0
-                    println("[engine] Knowledge Graph: $nodeCount nodes, $edgeCount edges")
-                }
-            }
-        }
-
+        // ── Phase 4: Codebase-gradle (N1) — Composite Context ──
+        val codebaseEntries = ArrayList<Map<String, Any>>()
         val codebaseContextFile = File("/tmp/opencode-context.txt")
-        if (contextMode in listOf("composite", "sql", "rag")) {
-            val buildFile = codebaseDir.resolve("build.gradle.kts")
-            if (buildFile.exists()) {
-                val hasAugment = buildFile.readText().contains("augmentOpencode")
-                if (hasAugment) {
-                    val cbProc = ProcessBuilder(listOf("./gradlew", "-q", "augmentOpencode"))
+
+        if (contextMode in listOf("composite", "rag")) {
+            val codebasePluginDir = codebaseDir.resolve("codebase-plugin")
+            if (codebasePluginDir.exists()) {
+                println("[engine] collectFromCodebase : pgvector indexing + composite context (EAGER+RAG+Graphify)")
+                val cbProc = ProcessBuilder(listOf(
+                    "./gradlew", "-q", "collectFromCodebase",
+                    "-PragQuestion=architecture du workspace"
+                ))
+                    .directory(codebasePluginDir)
+                    .redirectErrorStream(true)
+                    .start()
+                val cbExit = cbProc.waitFor()
+
+                if (cbExit == 0) {
+                    // Lire le contexte composite produit par codebase-gradle
+                    val workspaceContextFile = File(codebasePluginDir, "build/context/workspace-context.txt")
+                    if (workspaceContextFile.exists()) {
+                        val ctxContent = workspaceContextFile.readText()
+                        codebaseEntries.add(mapOf(
+                            "source" to "codebase",
+                            "contextSize" to workspaceContextFile.length(),
+                            "contextLines" to ctxContent.lines().size,
+                            "contextPreview" to ctxContent.take(500)
+                        ))
+                        println("[engine] OK collectFromCodebase OK — ${workspaceContextFile.length()} bytes, ${ctxContent.lines().size} lines")
+                    } else {
+                        println("[engine] collectFromCodebase : OK mais workspace-context.txt non trouvé")
+                    }
+                } else {
+                    println("[engine] collectFromCodebase : pgvector not available (exit=$cbExit)")
+                }
+            } else {
+                // Fallback : codebase-plugin/ absent → utiliser codebase-gradle/ racine
+                val buildFile = codebaseDir.resolve("build.gradle.kts")
+                if (buildFile.exists()) {
+                    println("[engine] collectFromCodebase : codebase-plugin/ absent, tentative racine codebase-gradle/")
+                    val cbProc = ProcessBuilder(listOf("./gradlew", "-q", "collectFromCodebase"))
                         .directory(codebaseDir)
                         .redirectErrorStream(true)
                         .start()
-                    cbProc.waitFor()
+                    val cbExit = cbProc.waitFor()
+                    if (cbExit == 0) {
+                        codebaseEntries.add(mapOf(
+                            "source" to "codebase",
+                            "status" to "collected via racine codebase-gradle/"
+                        ))
+                        println("[engine] OK collectFromCodebase OK (fallback)")
+                    } else {
+                        println("[engine] collectFromCodebase : échec fallback (exit=$cbExit)")
+                    }
+                } else {
+                    println("[engine] codebase-gradle (N1) not found — skipping composite context")
                 }
             }
         }
@@ -397,9 +465,11 @@ tasks.register("collectCompositeContext") {
         val result = mapOf(
             "query" to query,
             "mode" to contextMode,
+            "graphify" to graphifyEntries,
             "codexResults" to codexEntries,
             "trainingResults" to trainingEntries,
             "capsuleResults" to capsuleEntries,
+            "codebaseResults" to codebaseEntries,
             "codebaseContextPath" to (if (codebaseContextFile.exists()) codebaseContextFile.absolutePath else ""),
             "timestamp" to System.currentTimeMillis()
         )
@@ -409,7 +479,7 @@ tasks.register("collectCompositeContext") {
             mapper.writerWithDefaultPrettyPrinter().writeValueAsString(result)
         )
 
-        println("[engine] OK collectCompositeContext - ${codexEntries.size} codex + ${trainingEntries.size} training + ${capsuleEntries.size} capsule + codebase -> ${compositeOutput.absolutePath}")
+        println("[engine] OK collectCompositeContext — N0:graphify(${graphifyEntries.size}) N1:codebase(${codebaseEntries.size}) + N2:codex(${codexEntries.size})/training(${trainingEntries.size})/capsule(${capsuleEntries.size}) → ${compositeOutput.absolutePath}")
     }
 }
 
@@ -435,11 +505,12 @@ data class BoroughDef(
 val workspaceDir = File(System.getenv("HOME") ?: "/home/cheroliv").resolve("workspace").absoluteFile
 
 val boroughs = listOf(
-    BoroughDef("Newark",        "$workspaceDir/foundry/public/training-gradle",            2, "N2",   "producteur",     true,  "src/main/data/formations",    "build/spg/metadata.json",    "training", "TrainingExtension"),
-    BoroughDef("Manhattan",     "$workspaceDir/foundry/public/planner-gradle",              2, "N2",   "producteur",     true,  null,                          "build/spg/metadata.json",    "planner",  "PlannerExtension"),
-    BoroughDef("Brooklyn",      "$workspaceDir/foundry/public/codex-gradle",                2, "N2",   "producteur",     true,  "src/main/data/books",          "build/codex/metadata.json",  "codex",    "CodexExtension"),
-    BoroughDef("Queens",        "$workspaceDir/foundry/public/codebase-gradle",             1, "N1",   "producteur",     true,  null,                          "build/rag/metadata.json",    "codebase", "CodebaseExtension"),
-    BoroughDef("The Bronx",     "$workspaceDir/foundry/public/quizz-benchmark-gradle",      2, "N2",   "producteur",     true,  null,                          "build/quiz/metadata.json",   "quiz",     "QuizExtension"),
+    BoroughDef("Newark",        "$workspaceDir/foundry/public/training-gradle",            2, "N2",   "producteur",     true,  "src/main/data/formations",    "build/dataset/metadata.json",     "training", "TrainingExtension"),
+    BoroughDef("Manhattan",     "$workspaceDir/foundry/public/planner-gradle",              2, "N2",   "producteur",     true,  null,                          "build/spg/metadata.json",         "planner",  "PlannerExtension"),
+    BoroughDef("Brooklyn",      "$workspaceDir/foundry/public/codex-gradle",                2, "N2",   "producteur",     true,  "src/main/data/books",          null,                               "codex",    "CodexExtension"),
+    // Brooklyn metadata.json path depends on consumer outputFile config — no fixed convention
+    BoroughDef("Queens",        "$workspaceDir/foundry/public/codebase-gradle",             1, "N1",   "producteur",     true,  null,                          "build/rag/metadata.json",         "codebase", "CodebaseExtension"),
+    BoroughDef("The Bronx",     "$workspaceDir/foundry/public/quizz-benchmark-gradle",      2, "N2",   "producteur",     true,  null,                          "build/quiz-reports/generated/metadata.json",   "quiz",     "QuizExtension"),
     BoroughDef("Staten Island", "$workspaceDir/office/sites/magic-stick",                   2, "N2",   "deployeur",      false, null,                          null,                         null,       null),
     BoroughDef("New Jersey",    "$workspaceDir/foundry/public/engine",                      3, "N3",   "orchestrateur",  false, null,                          null,                         null,       null),
     BoroughDef("Compton",       "$workspaceDir/foundry/private/waiter-gradle",              2, "N2",   "consommateur",   false, null,                          null,                         null,       null),

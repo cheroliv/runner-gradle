@@ -212,3 +212,8 @@
 | `Deplacement physique` — waiter-gradle et workspace-gradle → foundry/private/
 | ✅ BoroughDef.dirPath mis a jour + DAG registry preserve.
 |===
+
+|===
+| Date | Tâche | Borough | Statut | Score
+| 2026-05-19 | Wiring engine→graphify (N0) + engine→codebase (N1) — Option AC Pipeline ABC | engine | ✅ | 10/10
+|===

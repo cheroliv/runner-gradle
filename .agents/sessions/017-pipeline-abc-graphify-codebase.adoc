@@ -1,0 +1,24 @@
+= Session 017 — Pipeline N0→N3 ABC: Engine Wiring Graphify (N0) + Codebase (N1)
+
+*Date*: 2026-05-19
+*Type*: feat
+*Score*: 10/10
+*Durée*: ~1h30
+
+== Résumé
+
+Câblage du pipeline N0→N3 complet dans collectCompositeContext : graphify scan (N0) → pgvector RAG (N1) → retrieval N2 → composite-context.json.
+
+== Modifications
+
+build.gradle.kts:
+- Phase 0 ajoutée : collectFromWorkspace (graphify-gradle N0) → graph.json frais
+- Phase 4 réécrite : collectFromCodebase (codebase-gradle N1) avec fallback
+- Hack augmentOpencode supprimé — remplacé par ProcessBuilder réel
+- Résultat enrichi : graphifyEntries + codebaseEntries ajoutés
+- Option skipGraphify pour sauter le scan lourd
+
+== Résultat
+- Compilation OK (build.gradle.kts, pas de src/main/kotlin)
+- 5 tâches Gradle enregistrées (deployWorkspace, info, generateApiSchema, collectCompositeContext, verifyBoroughs)
+- Pipeline N0→N3 en 1 commande : ./gradlew collectCompositeContext

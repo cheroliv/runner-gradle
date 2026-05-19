@@ -1,0 +1,14 @@
+= TEST_COVERAGE_ANALYSIS — Engine (N3)
+
+_Note_ : Engine n'a ni src/main/kotlin/, ni src/test/, ni framework de test. La charge de la preuve est sur les plugins consommateur (N0→N2), pas sur l'orchestrateur (N3). Règle AGENT.adoc §4.
+
+== État Global — Tests Cross-Boroughs (2026-05-19)
+
+[cols="2,3,2,3", options="header"]
+|===
+| Borough | Framework | Tests | Couvre
+| Graphify (N0) | JUnit5 | 58/58 PASS | collectFromWorkspace, verifyDagAcyclic
+| Codebase (N1) | Cucumber | 60 scenarios | EPIC 9 pgvector, composite context, metadata
+| Planner (N2) | JUnit5 | 26/26 (22 OK, 4 timeout LLM) | generatePlan, generateSPG
+| Engine (N3) | — | 0 (by design) | Orchestration seulement
+|===

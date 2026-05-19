@@ -6,8 +6,8 @@ _Ontologie spatiale_ : voir `configuration/.agents/AGENT_GOVERNANCE.adoc`
 _DAG_ : N3 — Orchestration (Regle 4bis)
 
 _Derniere mise a jour_ : 2026-05-19
-_Session terminee_ : 016 — EPIC K-1 Renommage taxonomie (deployWorkspace, generateApiSchema, collectCompositeContext, verifyBoroughs, info)
-_Session en cours_ : 017 — (à definir)
+_Session terminee_ : 017 — Pipeline N0→N3 ABC: Wiring Graphify (N0) + Codebase (N1) dans collectCompositeContext ✅
+_Session en cours_ : 018 — Test reel collectCompositeContext + cross-borough planner
 
 '''
 == REGLES ABSOLUES (resume)
@@ -23,7 +23,8 @@ _Session en cours_ : 017 — (à definir)
 
 |===
 | # | Date | Type | Sujet | Score
-| 17 | 2026-05-19 | migration | EPIC K-1 Renommage taxonomie (5 tâches : deployWorkspace, generateApiSchema, collectCompositeContext, verifyBoroughs, info) | 10/10
+| 17 | 2026-05-19 | feat | Pipeline N0→N3 ABC — Phase 0 graphify scan (N0) + Phase 4 codebase pgvector RAG (N1). Hack augmentOpencode remplacé. | 10/10
+| 16 | 2026-05-19 | migration | EPIC K-1 Renommage taxonomie (5 tâches) | 10/10
 | 16 | 2026-05-18 | feature | K04 verifyBoroughs + K03 Configuration par domaine (4 extensions créées : training/planner/quiz + Staten Island site.yml) + déplacement waiter/workspace → foundry/private/ | 10/10
 | 15 | 2026-05-16 | refacto | Jackson replace Groovy JsonSlurper/JsonOutput + capsule-gradle N2 integration (capsuleCompositeContext + capsuleretrieve) | 10/10
 | 14 | 2026-05-14 | infra | EPIC F — Template CI unifié déployé sur 5 boroughs (codebase, planner, training, waiter, plantuml) | 10/10

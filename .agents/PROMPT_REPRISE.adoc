@@ -1,25 +1,24 @@
 = PROMPT_REPRISE — Engine (New Jersey N3)
 :date: 2026-05-19
-:session: 016 — EPIC K-1 Renommage taxonomie
-:status: TERMINE
+:session: 018 — Test réel collectCompositeContext + cross-borough planner
+:status: A FAIRE
 
-== Livré en session 016
+== Livré en session 017
 
-* K-1 : Renommage/alignement de 5 tâches engine :
-  - `deployWorkspace` → déjà conforme (groupe deploy)
-  - `generateApiSchema` → déjà conforme (groupe generate)
-  - `collectCompositeContext` → déjà conforme (groupe collect)
-  - `verifyBoroughs` → déjà conforme (groupe verify)
-  - `info` → déjà conforme (groupe info)
-* 15 fichiers modifiés. Build OK.
+* Pipeline N0→N3 ABC — Wiring graphify (N0) + codebase (N1) dans collectCompositeContext :
+  - Phase 0 graphify scan → graph.json frais
+  - Phase 4 codebase pgvector RAG avec fallback
+  - Hack augmentOpencode supprimé — remplacé par ProcessBuilder réel
+  - Option skipGraphify
 
-== Prochaine session (017)
+== Prochaine session (018)
 
-* K-2 — Format pivot (AsciiDoc + metadata.json)
-* Ou K-4 suite — amélioration verifyBoroughs
+* Tester collectCompositeContext en conditions réelles (Ollama + pgvector up)
+* Vérifier que graphify scan produit graph.json exploitable
+* Option C cross-borough complète : planner-gradle consomme composite-context.json
+* verifyBoroughs — réduire les 7 WARN (build artifacts non produits)
 
 == Points d'attention
 
-* Les 7 WARN sur metadata.json sont attendus (artefacts de build)
-* Long Island (workspace-agent) en pré-bootstrap
+* Engine : 5 tâches Gradle, pas de src/main/kotlin (by design). Zéro tests (charge de la preuve sur les plugins)
 * Zéro commit sur engine
