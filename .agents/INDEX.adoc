@@ -80,6 +80,7 @@ _Session en cours_ : 019 — Test reel collectCompositeContext + cross-borough p
 | EPIC B | Engine Clean — ENG-C1 Migrer verifyDagAcyclic → graphify-plugin, ENG-C2 Supprimer aggregateGraphs/augmentOpencode, ENG-C3 engine = 4 taches, zero logique metier | TERMINE (session 11) | P0
 | EPIC F | Template CI Unifié — Déploiement test.yml standard sur 5 boroughs restants (codebase, planner, training, waiter, plantuml) | TERMINE (session 13) | P1
 | K-04 | `verifyBoroughs` — Validation arborescence 11 boroughs, gouvernance agent, metadata.json (EPIC K-4 TAXONOMIE_WORKSPACE.adoc Convention over Configuration) | TERMINE (session 16) | P0
+| EPIC O | Renommage `engine` → `runner-gradle` (Orchestrateur Transverse) — repertoire, build.gradle.kts, settings.gradle.kts, scripts shell, AGENT.adoc, gouvernance locale + cross-borough INDEX.adoc, GitHub remote. 12 sous-EPICs (O-0→O-11, 32 pts). | 🔲 À faire — P0 | P0
 |===
 
 '''
