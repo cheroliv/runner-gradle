@@ -1,36 +1,35 @@
 = PROMPT_REPRISE — runner-gradle
-:session: 021
+:session: 022
 :date: 2026-05-23
-:etat: Cleanup pilot-plugin TERMINE — verifyBoroughs delegue a workspace-gradle N4
-:epic_actif: N/A
+:etat: Menage TERMINE — generateApiSchema delegue a pilot-plugin N4. Objectif <200 lignes atteint.
+:epic_actif: Cleanup (termine)
 
 == Contexte de fin
 
-verifyBoroughs (+ findFileRecursive, findExtensionRegistration, inferMetadataFromFilesystem,
-extractAdocTitle, BoroughDef preBootstrapBoroughs) supprime du build.gradle.kts (-364 lignes).
-La logique vit maintenant dans le pilot-plugin de workspace-gradle (foundry/private/workspace-gradle/pilot-plugin/).
+generateApiSchema supprime du build.gradle.kts (-52 lignes). La logique vit
+dans pilot-plugin (ValidateApiSchemaTask.kt). Runner build.gradle.kts : 850 → 166 lignes.
 
-Runner build.gradle.kts : 577 → 213 lignes.
-Objectif <200 lignes atteignable avec generateApiSchema → workspace-gradle.
+Delegations terminees :
+- collectCompositeContext → codex/training/codebase (session 020)
+- verifyBoroughs → pilot-plugin (session 021)
+- generateApiSchema → pilot-plugin (session 022)
 
-== Reprendre à
+Runner = plugins {} + bakery {} + dagLevels + deployWorkspace + info. Zero logique metier.
 
-. `./gradlew info` — verifier Runner v2.0
+== Reprendre a
+
+. `./gradlew info` — verifier Runner v2.0 (166 lignes)
 . `git status` — voir les fichiers modifies non commites
-. Prochaine session : deleguer generateApiSchema (~50 lignes) → workspace-gradle (N4)
-  - Objectif : build.gradle.kts < 200 lignes (plugins + bakery + dagLevels + info + deployWorkspace)
+. Prochaine session : WSM-3 pilot-plugin tests ou nouvelle gouvernance (inferMetadataAsciiDocTask)
 
 == Fichiers touches
 
-- `build.gradle.kts` — -364 lignes (577→213), verifyBoroughs + helpers supprimes, +pilot plugin 0.0.0
-- `foundry/private/workspace-gradle/pilot-plugin/` — NOUVEAU sous-plugin N4
-  - `PilotPlugin.kt` — 15 lignes
-  - `VerifyBoroughsTask.kt` — 250 lignes (logique complete)
-  - `BoroughDef.kt` — 15 lignes (dataclass)
-  - `PilotExtension.kt` — 17 lignes
-  - `build.gradle.kts` — 65 lignes (plugin publish)
-  - `gradle/libs.versions.toml` — 39 lignes
+- `build.gradle.kts` — -52 lignes (215→166), generateApiSchema supprime
+- `pilot-plugin/PilotExtension.kt` — +openapiContract RegularFileProperty
+- `pilot-plugin/ValidateApiSchemaTask.kt` — nouveau (45 lignes)
+- `pilot-plugin/PilotPlugin.kt` — +enregistrement validateApiSchema
 
 == Compilation — Statut
 
-- runner-gradle → ✅ BUILD SUCCESSFUL (info + verifyBoroughs via pilot plugin)
+- runner-gradle → BUILD SUCCESSFUL (info + validateApiSchema via pilot plugin)
+- pilot-plugin → BUILD SUCCESSFUL + publishToMavenLocal

@@ -13,13 +13,13 @@ Runner CLI — Available Commands
 ./runner <command>
 
 Commands:
-  info                 Show runner status and DAG registry
-  provision            Generate provision.sh for workspace bootstrap
-  api | contract       Validate OpenAPI 3.0 contract (openapi.yaml)
+  info                 Show runner status and workspace paths
+  verify               Verify boroughs + OpenAPI contract
+  verify-boroughs      Validate metadata contracts for 11 boroughs
+  validate-api         Validate OpenAPI 3.0 contract (openapi.yaml)
   chatbot [model]      Start REPL with Ollama (default: deepseek-v4-pro:cloud)
   health               Return workspace health JSON
-  collect [query]      Run collectCompositeContext N2→N3 (codexRetrieve + codebaseRAG)
-  tasks                List all Gradle tasks (runner + subprojects)
+  tasks                List all Gradle tasks
 
 Direct Gradle:
   ./gradlew <task>     Run any Gradle task directly
@@ -30,14 +30,20 @@ case "${1:-}" in
     info)
         ./gradlew info -q
         ;;
-    provision)
-        ./gradlew deployWorkspace -q
+    verify)
+        ./gradlew verifyBoroughs validateApiSchema -q
         ;;
-    api)
-        ./gradlew generateApiSchema -q
+    verify-boroughs)
+        ./gradlew verifyBoroughs -q
+        ;;
+    validate-api)
+        ./gradlew validateApiSchema -q
         ;;
     contract)
-        ./gradlew generateApiSchema -q
+        ./gradlew validateApiSchema -q
+        ;;
+    api)
+        ./gradlew validateApiSchema -q
         ;;
     chatbot)
         ./chatbot.sh "${2:-deepseek-v4-pro:cloud}"
@@ -45,11 +51,8 @@ case "${1:-}" in
     health)
         ./health.sh
         ;;
-    collect)
-        ./gradlew collectCompositeContext -Pquery="${2:-}" -q
-        ;;
     tasks)
-        ./gradlew tasks --group runner
+        ./gradlew tasks --group deploy --group verify --group info --group bakery
         ;;
     usage|--help|-h|"")
         usage

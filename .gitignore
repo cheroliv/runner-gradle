@@ -8,3 +8,4 @@ build/
 *.pem
 *.key
 credentials.*
+site.yml
