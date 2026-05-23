@@ -1,4 +1,4 @@
-= SESSION_CHECKLIST — engine
+= SESSION_CHECKLIST — runner
 :toc:
 
 == Hook d'Ouverture (debut de session)
@@ -36,7 +36,7 @@ Procedure 6 etapes obligatoire :
 
 | 5
 | Tests
-| Aucun — Engine est un terminal consommateur sans tests
+| Aucun — Runner est un terminal consommateur sans tests
 
 | 6
 | Archivage

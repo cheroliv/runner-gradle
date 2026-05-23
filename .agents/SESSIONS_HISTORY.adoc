@@ -1,8 +1,14 @@
-= Sessions History — Engine
+= Sessions History — Runner
 :toc:
 
 |===
 | Session | Date | Type | EPIC(s) | Score
+
+| 019
+| 2026-05-23
+| rename
+| EPIC O — Renommage engine → runner-gradle (12 sous-EPICs O-0→O-11, 32 pts)
+| 10/10 — PLAN_GLOBAL, AGENTS, .agents/, mv + artefacts, scripts shell, gouvernance agent, 11 INDEX cross-boroughs, workspace-engine, openapi.yaml, gh repo rename, GLOBAL_CODE_REVIEW (101 occ), DAG verify PASS
 
 | 018
 | 2026-05-19
@@ -43,8 +49,8 @@
 | 011
 | 2026-05-12
 | cleanup
-| EPIC B — Engine Clean
-| 10/10 — verifyDagAcyclic migre vers graphify-gradle N0, aggregateGraphs/augmentOpencode supprimes, engine = 4 taches, zero logique metier
+| EPIC B — Runner Clean
+| 10/10 — verifyDagAcyclic migre vers graphify-gradle N0, aggregateGraphs/augmentOpencode supprimes, runner-gradle = 4 taches, zero logique metier
 
 | 010
 | 2026-05-11
@@ -62,19 +68,19 @@
 | 2026-05-11
 | feature
 | augmentOpencode — derniere tache cible du contrat
-| 10/10 — task augmentOpencode (ProcessBuilder, detection EPIC 9), engine.sh augment, usage()
+| 10/10 — task augmentOpencode (ProcessBuilder, detection EPIC 9), runner.sh augment, usage()
 
 | 007
 | 2026-05-11
 | leçon
-| L09 — Engine N3 consommateur, pas serveur HTTP
+| L09 — Runner N3 consommateur, pas serveur HTTP
 | 10/10 — lecon-l09.adoc, Regle 6 dans AGENT.adoc, L09 dans AGENT_GOVERNANCE.adoc
 
 | 006
 | 2026-05-11
 | feature
-| ENG-7 Integration engine.sh, ENG-8 Mock /health
-| 10/10 — engine.sh (api/contract/chatbot/health), health.sh (JSON HealthResponse), usage() inline
+| ENG-7 Integration runner.sh, ENG-8 Mock /health
+| 10/10 — runner.sh (api/contract/chatbot/health), health.sh (JSON HealthResponse), usage() inline
 
 | 005
 | 2026-05-11
@@ -92,7 +98,7 @@
 | 2026-05-10
 | feature
 | ENG-3 provisionWorkspace, ENG-4 Interface CLI
-| 10/10 — provision.sh (14 repos clone), engine.sh CLI wrapper, 5 tasks engine
+| 10/10 — provision.sh (14 repos clone), runner.sh CLI wrapper, 5 tasks runner-gradle
 
 | 002
 | 2026-05-09
@@ -110,7 +116,7 @@
 | 2026-05-05
 | init
 | ENG-0
-| — Bootstrap gouvernance agent engine
+| — Bootstrap gouvernance agent runner-gradle
 |===
 | 013
 | 2026-05-14

@@ -1,0 +1,29 @@
+= Session 019 — EPIC O Renommage engine → runner-gradle
+:date: 2026-05-23
+:epic: O
+:score: 10/10
+
+L'EPIC O (32 pts, 12 sous-EPICs O-0→O-11) est TERMINÉ en une session.
+
+== Déroulement
+
+O-0:: PLAN_GLOBAL.adoc — 20+ occurrences (DAG, P0→P3, ordre d'attaque, cockpit)
+O-1:: AGENTS.adoc racine — 14 occurrences (tableau 11 boroughs, historique, hook ouverture, chaîne valeur)
+O-2:: configuration/.agents/ — 25 occurrences (AGENT_GOVERNANCE, INDEX, MODEL_STRATEGY)
+O-3:: Renommage physique `mv engine → runner-gradle` + build.gradle.kts (33 occ) + settings.gradle.kts
+O-4:: Scripts shell — `engine.sh → runner.sh` + chatbot.sh (8 occ) + health.sh (1 occ)
+O-5:: Gouvernance agent — AGENT.adoc (7 occ), INDEX.adoc (11+ occ), SESSION_CHECKLIST, SESSIONS_HISTORY
+O-6:: INDEX.adoc cross-boroughs — 11 boroughs : graphify, planner, codex, codebase, capsule, bakery, training, waiter, workspace, magic-stick, agent-contracts
+O-7:: workspace-engine.adoc — 2 occurrences non-ex-engine (mailer + réutilisabilité)
+O-8:: openapi.yaml — title, description, contact, url
+O-9:: GitHub remote — `gh repo rename cheroliv/engine cheroliv/runner-gradle` + remote set-url
+O-10:: GLOBAL_CODE_REVIEW.adoc — 101 occurrences sed (workspace-engine.adoc préservé)
+O-11:: DAG verify — `./gradlew info` → "Runner v1.0", `verifyBoroughs` New Jersey PASS
+
+== Vérifications
+
+- `./gradlew info` → Runner v1.0 - N3 Orchestration ✅
+- `verifyBoroughs` → New Jersey PASS ✅
+- `workspace-engine.adoc` → préservé dans tous les fichiers ✅
+- Zéro occurrence `engine` résiduelle hors EPIC O lui-même et archives ✅
+- Remote GitHub → `cheroliv/runner-gradle` ✅

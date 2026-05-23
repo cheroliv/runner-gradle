@@ -1,16 +1,16 @@
 openapi: "3.0.3"
 info:
-  title: Engine N3 — Orchestration API
+  title: Runner N3 — Orchestration API
   description: |
     API SaaS Edster pour l'orchestration du workspace.
-    Engine N3 agrege les plugins N0/N1/N2 et expose :
+    Runner N3 agrege les plugins N0/N1/N2 et expose :
     - health : etat global du workspace
     - provision : bootstrap d'un workspace client
     - status : statut du DAG et des plugins
   version: "1.0.0"
   contact:
-    name: Engine N3 Team
-    url: https://github.com/cheroliv/engine
+    name: Runner N3 Team
+    url: https://github.com/cheroliv/runner-gradle
 
 servers:
   - url: http://localhost:8080/api/v1

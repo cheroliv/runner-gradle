@@ -1,25 +1,25 @@
 #!/usr/bin/env bash
-# engine.sh — CLI wrapper for N3 Engine
-# Usage: ./engine <command>
+# runner.sh — CLI wrapper for N3 Runner
+# Usage: ./runner <command>
 
 set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
 usage() {
     cat <<'EOF'
-Engine CLI — Available Commands
+Runner CLI — Available Commands
 ================================
 
-./engine <command>
+./runner <command>
 
 Commands:
-  info                 Show engine status and DAG registry
+  info                 Show runner status and DAG registry
   provision            Generate provision.sh for workspace bootstrap
   api | contract       Validate OpenAPI 3.0 contract (openapi.yaml)
   chatbot [model]      Start REPL with Ollama (default: deepseek-v4-pro:cloud)
   health               Return workspace health JSON
   collect [query]      Run collectCompositeContext N2→N3 (codexRetrieve + codebaseRAG)
-  tasks                List all Gradle tasks (engine + subprojects)
+  tasks                List all Gradle tasks (runner + subprojects)
 
 Direct Gradle:
   ./gradlew <task>     Run any Gradle task directly
@@ -49,7 +49,7 @@ case "${1:-}" in
         ./gradlew collectCompositeContext -Pquery="${2:-}" -q
         ;;
     tasks)
-        ./gradlew tasks --group engine
+        ./gradlew tasks --group runner
         ;;
     usage|--help|-h|"")
         usage

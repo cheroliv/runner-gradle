@@ -1,0 +1,31 @@
+= PROMPT_REPRISE — runner-gradle
+:session: 020
+:date: 2026-05-23
+:etat: EPIC O TERMINE — engine devient runner-gradle
+:epic_actif: N/A (EPIC O ferme)
+
+== Contexte de fin
+
+EPIC O (12 sous-EPICs, 32 pts) termine. `engine` → `runner-gradle` :
+- Repertoire physique : `foundry/public/runner-gradle/`
+- settings.gradle.kts : `rootProject.name = "runner-gradle"`
+- Remote GitHub : `cheroliv/runner-gradle`
+- Scripts : `runner.sh`, `chatbot.sh`, `health.sh`
+- build.gradle.kts : logs `[runner]`, BoroughDef New Jersey → runner-gradle
+- AGENT.adoc : "Runner — Directives Agent"
+
+== Reprendre à
+
+. `./gradlew info` — verifier "Runner v1.0"
+. `git status` — voir les fichiers modifies non commites
+. `./gradlew verifyBoroughs` — New Jersey PASS, ignorer Newark/The Bronx
+. Prochaine session : cleanup collectCompositeContext ou EPIC T
+
+== Fichiers touches (hors gouvernance)
+
+- `build.gradle.kts` — logs `[runner]`, BoroughDef, dagLevels, outputDir
+- `settings.gradle.kts` — rootProject.name
+- `runner.sh` — CLI wrapper
+- `chatbot.sh` — REPL Runner N3
+- `health.sh` — /health mock
+- `openapi.yaml` — title/description/contact/url

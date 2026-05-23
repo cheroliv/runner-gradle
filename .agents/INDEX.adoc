@@ -1,19 +1,19 @@
-= INDEX — Engine
+= INDEX — Runner
 :toc:
 
 _Regles absolues_ : voir `AGENT.adoc`
 _Ontologie spatiale_ : voir `configuration/.agents/AGENT_GOVERNANCE.adoc`
 _DAG_ : N3 — Orchestration (Regle 4bis)
 
-_Derniere mise a jour_ : 2026-05-19 (EPIC K fermé, K-5 terminé)
-_Session terminee_ : 018 — EPIC K K-5 Documentation (EPIC K fermé, toutes phases terminées)
-_Session en cours_ : 019 — Test reel collectCompositeContext + cross-borough planner
+_Derniere mise a jour_ : 2026-05-23 (EPIC O fermé, engine → runner-gradle)
+_Session terminee_ : 019 — EPIC O Renommage engine → runner-gradle (12 sous-EPICs, 32 pts)
+_Session en cours_ : 020 — Cleanup collectCompositeContext ou EPIC T
 
 '''
 == REGLES ABSOLUES (resume)
 
 === 1. COMMITS/GIT — INTERDICTION FORMELLE sans permission
-=== 2. PAS DE publishToMavenLocal — engine n'est pas un plugin
+=== 2. PAS DE publishToMavenLocal — runner-gradle n'est pas un plugin
 === 3. SECRETS via configuration/ — jamais en dur dans build.gradle.kts
 === 4. DAG N3 — jamais importe par N0/N1/N2
 === 5. PROCEDURE DE FIN DE SESSION — 6 ETAPES OBLIGATOIRES
@@ -25,10 +25,10 @@ _Session en cours_ : 019 — Test reel collectCompositeContext + cross-borough p
 |===
 | Phase | Livrable | Statut | Boroughs
 | K-0 | Document Jardin Secret — TAXONOMIE_WORKSPACE.adoc | ✅ 2026-05-18 | Workspace root
-| K-1 | Renommage 4 verbes (collectFrom*, generate*, deployTo*) | ✅ 2026-05-19 | Engine + tous N2
-| K-2 | Format pivot — metadataExpectedPath dans engine | ✅ 2026-05-19 | Engine (consommateur) + 4 producteurs
-| K-3 | Configuration par domaine — EngineExtension | ✅ 2026-05-18 | Engine
-| K-4 | Convention over configuration — verifyBoroughs | ✅ 2026-05-19 | Engine N3
+| K-1 | Renommage 4 verbes (collectFrom*, generate*, deployTo*) | ✅ 2026-05-19 | Runner + tous N2
+| K-2 | Format pivot — metadataExpectedPath dans runner | ✅ 2026-05-19 | Runner (consommateur) + 4 producteurs
+| K-3 | Configuration par domaine — RunnerExtension | ✅ 2026-05-18 | Runner
+| K-4 | Convention over configuration — verifyBoroughs | ✅ 2026-05-19 | Runner N3
 | K-5 | Documentation — MàJ INDEX.adoc boroughs | ✅ TERMINE (2026-05-19) | Gouvernance
 |===
 
@@ -47,14 +47,14 @@ _Session en cours_ : 019 — Test reel collectCompositeContext + cross-borough p
 | 10 | 2026-05-11 | infra | A3 CI/CD Template .github/workflows/test.yml deploye sur 3 projets | 10/10
 | 9 | 2026-05-11 | leçon | L10 — Compilation AVANT chaque commit + fix augmentOpencode | 10/10
 | 8 | 2026-05-11 | feature | augmentOpencode — derniere tache cible du contrat | 10/10
-| 7 | 2026-05-11 | leçon | L09 — Engine N3 consommateur, pas serveur HTTP | 10/10
-| 6 | 2026-05-11 | feature | ENG-7 Integration engine.sh + ENG-8 Mock /health | 10/10
+| 7 | 2026-05-11 | leçon | L09 — Runner N3 consommateur, pas serveur HTTP | 10/10
+| 6 | 2026-05-11 | feature | ENG-7 Integration runner.sh + ENG-8 Mock /health | 10/10
 | 5 | 2026-05-11 | feature | ENG-5 Interface API openapi.yaml + apiSchema + ENG-6 Chatbot CI/CD | 10/10
 | 4 | 2026-05-11 | feature | B1 StdoutFormatter [CTX]/[PLAN]/[RESULT] dans codebase-gradle/rag | 10/10
 | 3 | 2026-05-10 | feature | ENG-3 provisionWorkspace + ENG-4 Interface CLI | 10/10
 | 2 | 2026-05-09 | feature | ENG-1 aggregateGraphs + ENG-2 verifyDagAcyclic + bootstrap graphify-gradle | 10/10
 | 1 | 2026-05-07 | infra | git init + repo GitHub cheroliv/engine + push | 10/10
-| 0 | 2026-05-05 | init | Bootstrap gouvernance agent engine | —
+| 0 | 2026-05-05 | init | Bootstrap gouvernance agent runner-gradle | —
 |===
 
 '''
@@ -62,7 +62,7 @@ _Session en cours_ : 019 — Test reel collectCompositeContext + cross-borough p
 
 |===
 | EPIC | Description | Statut | Priorite
-| ENG-0 | Bootstrap gouvernance agent engine | TERMINE | P0
+| ENG-0 | Bootstrap gouvernance agent runner-gradle | TERMINE | P0
 | ENG-100 | git init + repo GitHub cheroliv/engine + push | TERMINE (session 1) | P0
 | ENG-1 | `aggregateGraphs` — agregation globale graph.json | TERMINE (session 2) → SUPPRIME (session 11) | P0
 | ENG-2 | `verifyDagAcyclic` — verification DAG inter-plugins | TERMINE (session 2) → MIGRE vers graphify N0 (session 11) | P0
@@ -71,16 +71,16 @@ _Session en cours_ : 019 — Test reel collectCompositeContext + cross-borough p
 | B1 | `StdoutFormatter` — contrat [CTX]/[PLAN]/[RESULT] (dans codebase-gradle N1) | TERMINE (session 4) | P0
 | ENG-5 | Interface API — endpoint SaaS Edster | TERMINE (session 5) | P2
 | ENG-6 | Chatbot CI/CD conversationnel | TERMINE (session 5) | P2
-| ENG-7 | Integration CLI — engine.sh api/chatbot/health | TERMINE (session 6) | P2
+| ENG-7 | Integration CLI — runner.sh api/chatbot/health | TERMINE (session 6) | P2
 | ENG-8 | Mock /health endpoint — health.sh JSON | TERMINE (session 6) | P2
-| L09 | Lecon — Engine N3 consommateur, pas serveur HTTP | TERMINE (session 7) | P0
+| L09 | Lecon — Runner N3 consommateur, pas serveur HTTP | TERMINE (session 7) | P0
 | ENG-9 | `augmentOpencode` — derniere tache cible contrat | TERMINE (session 8) → SUPPRIME (session 11) | P0
 | L10 | Lecon — Compilation AVANT chaque commit | TERMINE (session 9) | P0
 | A3 | CI/CD Workflow GitHub Actions — Template deploye quizz-benchmark/graphify-gradle/payment-scaffold | TERMINE (session 10) | P1
-| EPIC B | Engine Clean — ENG-C1 Migrer verifyDagAcyclic → graphify-plugin, ENG-C2 Supprimer aggregateGraphs/augmentOpencode, ENG-C3 engine = 4 taches, zero logique metier | TERMINE (session 11) | P0
+| EPIC B | Engine Clean — ENG-C1 Migrer verifyDagAcyclic → graphify-plugin, ENG-C2 Supprimer aggregateGraphs/augmentOpencode, ENG-C3 runner-gradle = 4 taches, zero logique metier | TERMINE (session 11) | P0
 | EPIC F | Template CI Unifié — Déploiement test.yml standard sur 5 boroughs restants (codebase, planner, training, waiter, plantuml) | TERMINE (session 13) | P1
 | K-04 | `verifyBoroughs` — Validation arborescence 11 boroughs, gouvernance agent, metadata.json (EPIC K-4 TAXONOMIE_WORKSPACE.adoc Convention over Configuration) | TERMINE (session 16) | P0
-| EPIC O | Renommage `engine` → `runner-gradle` (Orchestrateur Transverse) — repertoire, build.gradle.kts, settings.gradle.kts, scripts shell, AGENT.adoc, gouvernance locale + cross-borough INDEX.adoc, GitHub remote. 12 sous-EPICs (O-0→O-11, 32 pts). | 🔲 À faire — P0 | P0
+| EPIC O | Renommage `engine` → `runner-gradle` (Orchestrateur Transverse) — repertoire, build.gradle.kts, settings.gradle.kts, scripts shell, AGENT.adoc, gouvernance locale + cross-borough INDEX.adoc, GitHub remote. 12 sous-EPICs (O-0→O-11, 32 pts). | ✅ TERMINE (session 019) | P0
 |===
 
 '''
@@ -95,14 +95,14 @@ _Session en cours_ : 019 — Test reel collectCompositeContext + cross-borough p
 | `.gitignore` | ✅
 | `build.gradle.kts` | ✅ 348 lignes (4 taches)
 | `settings.gradle.kts` | ✅
-| `repo GitHub` | ✅ https://github.com/cheroliv/engine (private)
+| `repo GitHub` | ✅ https://github.com/cheroliv/runner-gradle (private)
 |===
 
 '''
 == Dependances Inter-Projets (DAG N3)
 
 |===
-| Projet importe | Niveau | Usage dans engine
+| Projet importe | Niveau | Usage dans runner
 | `graphify-gradle` | N0 | Scan workspace → graph.json local
 | `codebase-gradle` | N1 | RAG pgvector, anonymisation
 | `plantuml-gradle` | N2 | Diagrammes KG globaux

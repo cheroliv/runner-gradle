@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# health.sh — Engine N3 /health mock endpoint
+# health.sh — Runner N3 /health mock endpoint
 # Retourne le JSON HealthResponse conforme au contrat OpenAPI 3.0
 
 set -euo pipefail
