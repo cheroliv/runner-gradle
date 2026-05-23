@@ -20,8 +20,18 @@ val workspaceRoot = File(System.getenv("HOME") ?: "/home/cheroliv").resolve("wor
 val foundryDir = workspaceRoot.resolve("foundry/public")
 val siteName: String = project.findProperty("siteName") as? String ?: "cheroliv.com"
 
+// HACK: utiliser un chemin relatif depuis engine/ pour contourner le bug
+// File.resolve(cheminAbsolu) dans le bakery plugin v0.1.4.
+// Le plugin utilise File(File parent, String child) qui concatène avec les
+// chemins absolus au lieu de les remplacer.
+val siteConfigFile = file("$officePath/sites/$siteName/site.yml")
+val relativeConfigPath = project.layout.projectDirectory.asFile
+    .toPath()
+    .relativize(siteConfigFile.toPath())
+    .toString()
+
 bakery {
-    configPath.set(file("$officePath/sites/$siteName/site.yml").path)
+    configPath.set(relativeConfigPath)
 }
 
 val dagLevels = mapOf(
