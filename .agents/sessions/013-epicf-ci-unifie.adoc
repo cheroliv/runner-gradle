@@ -95,4 +95,4 @@ Workspace `PROMPT_REPRISE.adoc` était désynchronisé — référençait engine
 == Résultat
 
 EPIC F TERMINE. Template CI standard déployé sur tous les boroughs N1/N2/N3.
-Seul magic-stick (Staten Island) reste sans CI — par design (site statique bakery).
+Seul magic-stick (doc site, Staten Island) reste sans CI — par design (site statique via bakery-gradle).

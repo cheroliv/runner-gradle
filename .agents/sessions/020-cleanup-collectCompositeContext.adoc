@@ -22,7 +22,7 @@ propriétaires via une nouvelle tâche `generateCompositeContext`.
 
 ----
 ./gradlew generateCompositeContext → codebase-gradle (N1)
-  ├── CodexVectorStore (import doc-pipeline directement)
+  ├── CodexVectorStore (import codex-plugin directement)
   └── ProcessBuilder → training-gradle (N2)
        ├── ProcessBuilder → codebase-gradle (appel récursif → codex)
        └── pgvector AFNOR/REAC (onnx-local, training_datasets)
@@ -34,7 +34,7 @@ propriétaires via une nouvelle tâche `generateCompositeContext`.
 [cols="2,5"]
 |===
 | Fichier | Rôle
-| `codex-gradle/doc-pipeline/.../CodexCompositeContextTask.kt` | 45 lignes — appel CodexVectorStore, sérialisation JSON
+| `codex-gradle/codex-plugin/.../CodexCompositeContextTask.kt` | 45 lignes — appel CodexVectorStore, sérialisation JSON
 | `training-gradle/.../TrainingCompositeContextTask.kt` | 130 lignes — ProcessBuilder codebase + AFNOR/REAC pgvector
 | `codebase-gradle/.../CodebaseCompositeContextTask.kt` | 110 lignes — CodexVectorStore + ProcessBuilder training
 |===
